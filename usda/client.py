@@ -1,8 +1,9 @@
-__author__ = 'scarroll'
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
-from pygov.usda.enums import *
-from pygov.usda.domain import Nutrient, Food, FoodReport
-from pygov.base.client import DataGovClientBase, get_response_data
+from .enums import *
+from .domain import Nutrient, Food, FoodReport
+from .base import DataGovClientBase, get_response_data
 
 
 class UsdaClient(DataGovClientBase):

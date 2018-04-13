@@ -1,8 +1,8 @@
-__author__ = 'shane'
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import unittest
-
-from pygov.usda.client import UsdaClient
+from ..client import UsdaClient
 
 
 class UsdaTests(unittest.TestCase):
@@ -23,7 +23,7 @@ class UsdaTests(unittest.TestCase):
         self.assertIsNotNone(food)
         food_report = self.usdaClient.get_food_report(food.id)
         self.assertIsNotNone(food_report)
-        print food_report
+        print(food_report)
 
 if __name__ == "__main__":
     unittest.main()

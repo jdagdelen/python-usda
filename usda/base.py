@@ -1,4 +1,5 @@
-__author__ = 'scarroll'
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 import urllib
 import urllib2
