@@ -1,5 +1,7 @@
 # python-usda
 
+[![Code Health](https://landscape.io/github/Lucidiot/python-usda/master/landscape.svg?style=flat)](https://landscape.io/github/Lucidiot/python-usda/master) [![Requirements Status](https://requires.io/github/Lucidiot/python-usda/requirements.svg?branch=master)](https://requires.io/github/Lucidiot/python-usda/requirements/?branch=master)
+
 python-usda is a fork of [pygov](https://pypi.org/project/pygov/) focused on [USDA's Food Composition Database API](http://ndb.nal.usda.gov/ndb/doc/).
 
 ## Installation
