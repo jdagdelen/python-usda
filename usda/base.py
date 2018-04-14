@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+try:
+    from urllib.parse import urlencode
+    from urllib.request import urlopen
+except ImportError:  # Python 2 compatibility
+    from urllib import urlencode
+    from urllib2 import urlopen
 
-import urllib
-import urllib2
 import json
 
 uri_base = 'http://api.data.gov/'
 
 
 def get_response_data(uri):
-    response = urllib2.urlopen(uri)
-    if response.code != 200:
-        raise Exception("Error\r\n\tCode: {0}\r\n\tMessage: {1}".format(
-            response.code, response.msg))
-    data = json.load(response.fp)
-    return data
+    return json.load(urlopen(uri))
 
 
 class DataGovClientBase(object):
@@ -28,6 +27,6 @@ class DataGovClientBase(object):
         kwargs['api_key'] = self.key
         if 'format' not in kwargs and self.use_format:
             kwargs['format'] = 'json'
-        params = urllib.urlencode(kwargs)
+        params = urlencode(kwargs)
         return "{0}{1}{2}/{3}?{4}".format(
             uri_base, self.uri_part, api, uri_action, params)
