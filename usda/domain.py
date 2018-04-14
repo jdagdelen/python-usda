@@ -30,6 +30,10 @@ class Measure(UsdaObject):
         self.label = label
         self.value = value
 
+    def __repr__(self):
+        return "Measure '{0}': {1} {2}".format(
+            self.label, self.value, self.quantity)
+
 
 class Nutrient(UsdaObject):
 
@@ -50,6 +54,9 @@ class Nutrient(UsdaObject):
     def __str__(self):
         return "{0}".format(self.name)
 
+    def __repr__(self):
+        return "Nutrient ID {0} '{1}'".format(self.id, self.name)
+
 
 class Food(UsdaObject):
 
@@ -64,6 +71,9 @@ class Food(UsdaObject):
 
     def __str__(self):
         return "{0}".format(self.name)
+
+    def __repr__(self):
+        return "Food ID {0} '{1}'".format(self.id, self.name)
 
 
 class FoodReport(UsdaObject):
@@ -92,8 +102,8 @@ class FoodReport(UsdaObject):
         report = response_data["report"]
         type = report["type"]
         food = report['food']
-        food_group = None if type == "Basic" or type == "Statistics"
-        else food["fg"]
+        food_group = None if type == "Basic" or type == "Statistics" \
+            else food["fg"]
         return FoodReport(
             food=Food(id=food["ndbno"], name=food['name']),
             nutrients=FoodReport.__get_nutrients(food["nutrients"]),
@@ -107,3 +117,6 @@ class FoodReport(UsdaObject):
         self.report_type = report_type
         self.foot_notes = foot_notes
         self.food_group = food_group
+
+    def __repr__(self):
+        return "Food Report for '{0}'".format(repr(self.food))
