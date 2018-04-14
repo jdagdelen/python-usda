@@ -79,17 +79,17 @@ class Food(UsdaObject):
 class FoodReport(UsdaObject):
 
     @staticmethod
-    def __get_measures(raw_measures):
+    def _get_measures(raw_measures):
         measures = list()
         for raw_measure in raw_measures:
             measures.append(Measure.from_response_data(raw_measure))
         return measures
 
     @staticmethod
-    def __get_nutrients(raw_nutrients):
+    def _get_nutrients(raw_nutrients):
         nutrients = list()
         for raw_nutrient in raw_nutrients:
-            measures = FoodReport.__get_measures(raw_nutrient["measures"])
+            measures = FoodReport._get_measures(raw_nutrient["measures"])
             nutrient = Nutrient(
                 id=raw_nutrient["nutrient_id"], name=raw_nutrient["name"],
                 group=raw_nutrient["group"], unit=raw_nutrient["unit"],
@@ -106,7 +106,7 @@ class FoodReport(UsdaObject):
             else food["fg"]
         return FoodReport(
             food=Food(id=food["ndbno"], name=food['name']),
-            nutrients=FoodReport.__get_nutrients(food["nutrients"]),
+            nutrients=FoodReport._get_nutrients(food["nutrients"]),
             report_type=report["type"],
             foot_notes=report["footnotes"], food_group=food_group)
 
