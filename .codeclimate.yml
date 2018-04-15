@@ -1,0 +1,30 @@
+---
+engines:
+  duplication:
+    enabled: true
+    exclude_paths:
+      - "**/tests/"
+      - "**/test_**.py"
+    config:
+      languages:
+        python:
+          mass_threshold: 51
+  fixme:
+    enabled: true
+  radon:
+    enabled: true
+    config:
+      threshold: "C"
+    exclude_paths:
+      - "**/tests/"
+      - "**/test_**.py"
+  pep8:
+    enabled: true
+  git-legal:
+    enabled: true
+
+ratings:
+  paths:
+  - "**.py"
+  - "requirements*.txt"
+exclude_paths: []
