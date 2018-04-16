@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from six import with_metaclass
+from abc import ABCMeta, abstractstaticmethod
 
-class UsdaObject(object):
+
+class UsdaObject(with_metaclass(ABCMeta)):
 
     def __init__(self):
         pass
 
-    @staticmethod
+    @abstractstaticmethod
     def from_response_data(response_data):
-        raise NotImplemented(
-            "This method is not implemented in the base class 'UsdaObject' "
-            "and must be overriden.")
+        pass
 
 
 class Measure(UsdaObject):
