@@ -5,15 +5,18 @@ from enum import Enum
 
 
 class UsdaApis(Enum):
+    """Data.gov API endpoints for USDA APIs"""
     ndb = "ndb"
 
 
 class UsdaUriActions(Enum):
+    """USDA API available actions"""
     list = "list"
     report = "reports"
 
 
 class UsdaNdbListType(Enum):
+    """USDA API food or nutrients list settings"""
     all_nutrients = "n"
     specialty_nutrients = "ns"
     standard_release_nutrients = "nr"
@@ -22,6 +25,7 @@ class UsdaNdbListType(Enum):
 
 
 class UsdaNdbReportType(Enum):
+    """USDA API food report or nutrients report types"""
     basic = "b"
     full = "f"
     stats = "s"

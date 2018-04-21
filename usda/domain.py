@@ -6,12 +6,14 @@ from abc import ABCMeta, abstractstaticmethod
 
 
 class UsdaObject(with_metaclass(ABCMeta)):
+    """Describes any kind of USDA API result."""
 
     def __init__(self):
         pass
 
     @abstractstaticmethod
     def from_response_data(response_data):
+        """Generate an object from JSON response data."""
         pass
 
 
@@ -37,6 +39,8 @@ class Measure(UsdaObject):
 
 
 class Nutrient(UsdaObject):
+    """Describes a USDA nutrient.
+    In reports, can hold associated measurement data."""
 
     @staticmethod
     def from_response_data(response_data):
@@ -60,6 +64,7 @@ class Nutrient(UsdaObject):
 
 
 class Food(UsdaObject):
+    """Describes a USDA food item."""
 
     @staticmethod
     def from_response_data(response_data):
@@ -78,9 +83,11 @@ class Food(UsdaObject):
 
 
 class FoodReport(UsdaObject):
+    """Describes a USDA food report."""
 
     @staticmethod
     def _get_measures(raw_measures):
+        """Get measurements from JSON data."""
         measures = list()
         for raw_measure in raw_measures:
             measures.append(Measure.from_response_data(raw_measure))
@@ -88,6 +95,7 @@ class FoodReport(UsdaObject):
 
     @staticmethod
     def _get_nutrients(raw_nutrients):
+        """Get nutrients from JSON data with their associated measurements."""
         nutrients = list()
         for raw_nutrient in raw_nutrients:
             measures = FoodReport._get_measures(raw_nutrient["measures"])

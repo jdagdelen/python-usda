@@ -45,18 +45,25 @@ def api_request(uri, **parameters):
 
 
 class DataGovClientBase(object):
+    """Base class for Data.gov API clients."""
 
     def __init__(self, uri_part, api, api_key, use_format=True):
+        """Instanciate a Data.gov API client.
+        Requires an API endpoint and an API key.
+        Automatic return format (JSON/XML) adding to URLs can be disabled."""
         self.uri_part = uri_part
         self.api = api
         self.key = api_key
         self.use_format = use_format
 
     def build_uri(self, uri_action):
+        """Build a valid URI for a specific action."""
         return "{0}{1}{2}/{3}".format(
             BASE_URI, self.uri_part, self.api.value, uri_action.value)
 
     def run_request(self, uri_action, **kwargs):
+        """Execute a request and return an API response.
+        Can throw HTTPError or any DataGovApiError."""
         kwargs['api_key'] = self.key
         if 'format' not in kwargs and self.use_format:
             kwargs['format'] = 'json'
