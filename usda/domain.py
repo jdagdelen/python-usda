@@ -9,7 +9,8 @@ class UsdaObject(with_metaclass(ABCMeta)):
     """Describes any kind of USDA API result."""
 
     def __init__(self):
-        pass
+        if self.__class__ == UsdaObject:
+            raise TypeError("This abstract class cannot be instanciated.")
 
     @staticmethod
     def from_response_data(response_data):
