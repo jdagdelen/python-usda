@@ -14,7 +14,6 @@ class UsdaObject(with_metaclass(ABCMeta)):
     @abstractstaticmethod
     def from_response_data(response_data):
         """Generate an object from JSON response data."""
-        pass
 
 
 class Measure(UsdaObject):
@@ -28,14 +27,17 @@ class Measure(UsdaObject):
 
     def __init__(self, quantity, gram_equivalent, label, value):
         super(Measure, self).__init__()
-        self.quantity = quantity
-        self.gram_equivalent = gram_equivalent
-        self.label = label
-        self.value = value
+        self.quantity = float(quantity)
+        self.gram_equivalent = float(gram_equivalent)
+        self.label = str(label)
+        self.value = float(value)
 
     def __repr__(self):
         return "Measure '{0}': {1} {2}".format(
             self.label, self.value, self.quantity)
+
+    def __str__(self):
+        return self.label
 
 
 class Nutrient(UsdaObject):
@@ -49,15 +51,15 @@ class Nutrient(UsdaObject):
     def __init__(self, id, name,
                  group=None, unit=None, value=None, measures=None):
         super(Nutrient, self).__init__()
-        self.id = id
-        self.name = name
-        self.group = group
-        self.unit = unit
-        self.value = value
+        self.id = int(id)
+        self.name = str(name)
+        self.group = str(group) if group is not None else None
+        self.unit = str(unit) if unit is not None else None
+        self.value = float(value) if value is not None else None
         self.measures = measures
 
     def __str__(self):
-        return "{0}".format(self.name)
+        return self.name
 
     def __repr__(self):
         return "Nutrient ID {0} '{1}'".format(self.id, self.name)
@@ -72,11 +74,11 @@ class Food(UsdaObject):
 
     def __init__(self, id, name):
         super(Food, self).__init__()
-        self.id = id
-        self.name = name
+        self.id = int(id)
+        self.name = str(name)
 
     def __str__(self):
-        return "{0}".format(self.name)
+        return self.name
 
     def __repr__(self):
         return "Food ID {0} '{1}'".format(self.id, self.name)
@@ -121,11 +123,12 @@ class FoodReport(UsdaObject):
 
     def __init__(self, food, nutrients, report_type, foot_notes, food_group):
         super(FoodReport, self).__init__()
+        assert isinstance(food, Food)
         self.food = food
         self.nutrients = nutrients
-        self.report_type = report_type
+        self.report_type = str(report_type)
         self.foot_notes = foot_notes
-        self.food_group = food_group
+        self.food_group = str(food_group) if food_group is not None else None
 
     def __repr__(self):
         return "Food Report for '{0}'".format(repr(self.food))
