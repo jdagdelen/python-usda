@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from six import with_metaclass
-from abc import ABCMeta, abstractstaticmethod
+from abc import ABCMeta
 
 
 class UsdaObject(with_metaclass(ABCMeta)):
@@ -11,9 +11,10 @@ class UsdaObject(with_metaclass(ABCMeta)):
     def __init__(self):
         pass
 
-    @abstractstaticmethod
+    @staticmethod
     def from_response_data(response_data):
         """Generate an object from JSON response data."""
+        raise NotImplementedError
 
 
 class Measure(UsdaObject):
