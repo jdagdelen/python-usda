@@ -13,14 +13,15 @@ setup(
     },
     install_requires=[
         'enum34>=1.1.3',
-        'six>=1.11.0',
+        'six>=1.10.0',
         'requests>=2.16.0'
     ],
     extras_require={
         'dev': [
             "pytest",
             "pytest-cov",
-            "pytest-pep8"
+            "pytest-pep8",
+            "httmock"
         ]
     },
     license='GNU General Public License 3',

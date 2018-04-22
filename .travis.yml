@@ -10,7 +10,7 @@ python:
   - "3.5"
   - "3.6"
 before_install:
-  - pip install pytest pytest-cov coverage urllib3[secure] coveralls setuptools
+  - pip install pytest pytest-cov coverage urllib3[secure] httmock coveralls setuptools
 install:
   - python setup.py install
 before_script:
