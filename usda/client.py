@@ -38,7 +38,7 @@ class UsdaClient(DataGovClientBase):
             UsdaUriActions.report, type=report_type.value, ndbno=ndb_food_id)
         return FoodReport.from_response_data(data)
 
-    def get_nutrient_report(self, *nutrients,
+    def get_nutrient_report(self, nutrients,
                             report_type=UsdaNdbReportType.basic):
         """Get a Nutrient Report for each of the given nutrient IDs."""
         raise NotImplementedError  # TODO
