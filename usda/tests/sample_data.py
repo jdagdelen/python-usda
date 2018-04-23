@@ -32,3 +32,37 @@ FOOD_REPORT_DATA = {
         ]
     }
 }
+
+FOOD_LIST_DATA = {
+    "list": {
+        "item": [
+            {
+                "offset": 0,
+                "id": "1337",
+                "name": "Pizza"
+            },
+            {
+                "offset": 1,
+                "id": "42",
+                "name": "Pizza with pineapple"
+            }
+        ]
+    }
+}
+
+NUTRIENT_LIST_DATA = {
+    "list": {
+        "item": [
+            {
+                "offset": 0,
+                "id": "1337",
+                "name": "Calcium"
+            },
+            {
+                "offset": 1,
+                "id": "42",
+                "name": "Lactose"
+            }
+        ]
+    }
+}
