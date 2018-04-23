@@ -13,6 +13,8 @@ class TestUsdaDomain(object):
         """Tests for UsdaObject class"""
         with pytest.raises(TypeError):
             UsdaObject()
+        with pytest.raises(NotImplementedError):
+            UsdaObject.from_response_data(None)
 
     def test_measure(self):
         """Tests for Measure class"""
