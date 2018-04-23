@@ -42,11 +42,11 @@ class UsdaClient(DataGovClientBase):
                             report_type=UsdaNdbReportType.basic):
         """Get a Nutrient Report for each of the given nutrient IDs."""
         raise NotImplementedError  # TODO
-        if len(nutrients) > 20:
-            raise ValueError("A nutrient report request cannot contain "
-                             "more than 20 nutrients")
-        data = self.run_request(
-            UsdaUriActions.report, type=report_type.value, nutrients=nutrients)
+        # if len(nutrients) > 20:
+        #     raise ValueError("A nutrient report request cannot contain "
+        #                      "more than 20 nutrients")
+        # data = self.run_request(
+        #   UsdaUriActions.report, type=report_type.value, nutrients=nutrients)
 
     def _build_item_list(self, data, usda_class):
         """Generate a list of USDA objects from parsed JSON data."""
@@ -63,7 +63,3 @@ class UsdaClient(DataGovClientBase):
     def _build_foods_list(self, response_data):
         """Generate a list of food items."""
         return self._build_item_list(response_data, Food)
-
-    def _build_food_report(self, response_data):
-        """Generate a food report."""
-        return FoodReport(response_data)
