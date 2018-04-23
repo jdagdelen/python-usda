@@ -6,7 +6,7 @@ import pytest
 from httmock import urlmatch, HTTMock
 from requests import HTTPError
 from usda.base import api_request, DataGovClientBase, \
-    DataGovApiError, DataGovApiRateExceededError
+    DataGovApiError, DataGovApiRateExceededError, DataGovInvalidApiKeyError
 from usda.enums import UsdaApis, UsdaUriActions
 
 
@@ -37,6 +37,15 @@ class TestBase(object):
                        '"message": "API rate limit exceeded"}}'
         }
 
+    @urlmatch(path=r'/?key.*')
+    def api_key_invalid_error(self, uri, request):
+        return {
+            'status_code': 403,
+            'content': '{"error": {"code": "API_KEY_INVALID", '
+                       '"message": "An invalid api_key was supplied. '
+                       'Get one at http://api.data.gov"}}'
+        }
+
     @urlmatch(path=r'/?error.*')
     def api_unknown_error(self, uri, request):
         return {
@@ -59,6 +68,7 @@ class TestBase(object):
         return HTTMock(self.api_ok,
                        self.api_parameter_error,
                        self.api_rate_limit_error,
+                       self.api_key_invalid_error,
                        self.api_unknown_error,
                        self.api_http_error,
                        self.data_gov_api_ok)
@@ -80,6 +90,12 @@ class TestBase(object):
         with pytest.raises(DataGovApiRateExceededError):
             with apimock:
                 api_request("http://api/rate")
+
+    def test_api_request_key_invalid_error(self, apimock):
+        """Test api_request with an invalid API key"""
+        with pytest.raises(DataGovInvalidApiKeyError):
+            with apimock:
+                api_request("http://api/key")
 
     def test_api_request_other_error(self, apimock):
         """Test api_request with an unknown API error"""
