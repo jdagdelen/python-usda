@@ -4,6 +4,7 @@
 
 import pytest
 from usda.domain import UsdaObject, Food, Nutrient, Measure, FoodReport
+from usda.tests.sample_data import FOOD_REPORT_DATA
 
 
 class TestUsdaDomain(object):
@@ -59,37 +60,7 @@ class TestUsdaDomain(object):
 
     def test_food_report(self):
         """Tests for FoodReport class"""
-        data = {
-            "report": {
-                "type": "Basic",
-                "food": {
-                    "ndbno": "123456",
-                    "name": "Pizza",
-                    "nutrients": [
-                        {
-                            "nutrient_id": 42,
-                            "name": "Lactose",
-                            "group": "Proximates",
-                            "unit": "g",
-                            "value": 0.42,
-                            "measures": [
-                                {
-                                    "qty": 1.0,
-                                    "eqv": 42.0,
-                                    "eunit": "g",
-                                    "label": "Measurement",
-                                    "value": 13.37
-                                }
-                            ]
-                        }
-                    ]
-                },
-                "footnotes": [
-                    "Footnote 1", "Footnote 2"
-                ]
-            }
-        }
-        fr = FoodReport.from_response_data(data)
+        fr = FoodReport.from_response_data(FOOD_REPORT_DATA)
         assert fr.report_type == "Basic"
         assert fr.foot_notes == ["Footnote 1", "Footnote 2"]
         assert fr.food_group is None
