@@ -13,6 +13,7 @@ class UsdaUriActions(Enum):
     """USDA API available actions"""
     list = "list"
     report = "reports"
+    nutrients = "nutrients"
 
 
 class UsdaNdbListType(Enum):
@@ -25,7 +26,7 @@ class UsdaNdbListType(Enum):
 
 
 class UsdaNdbReportType(Enum):
-    """USDA API food report or nutrients report types"""
+    """USDA API food report types"""
     basic = "b"
     full = "f"
     stats = "s"

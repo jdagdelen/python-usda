@@ -7,7 +7,7 @@ import json
 from httmock import urlmatch, HTTMock
 from usda.client import UsdaClient
 from usda.tests.sample_data import \
-    FOOD_LIST_DATA, NUTRIENT_LIST_DATA, FOOD_REPORT_DATA
+    FOOD_LIST_DATA, NUTRIENT_LIST_DATA, FOOD_REPORT_DATA, NUTRIENT_REPORT_DATA
 
 
 class TestClient(object):
@@ -20,13 +20,17 @@ class TestClient(object):
         elif "lt=n" in uri.query:
             return json.dumps(NUTRIENT_LIST_DATA)
 
-    @urlmatch(path=r'/usda/ndb/report')
+    @urlmatch(path=r'/usda/ndb/reports')
     def api_report(self, uri, request):
         return json.dumps(FOOD_REPORT_DATA)
 
+    @urlmatch(path=r'/usda/ndb/nutrients')
+    def api_nutrients(self, uri, request):
+        return json.dumps(NUTRIENT_REPORT_DATA)
+
     @pytest.fixture
     def apimock(self):
-        return HTTMock(self.api_list, self.api_report)
+        return HTTMock(self.api_list, self.api_report, self.api_nutrients)
 
     def test_client_init(self):
         cli = UsdaClient("API_KAY")
@@ -55,6 +59,8 @@ class TestClient(object):
             fr = cli.get_food_report(123456)
         assert fr.food.name == "Pizza"
 
-    def test_client_nutrient_report(self):
-        with pytest.raises(NotImplementedError):
-            UsdaClient("DEMO_KEY").get_nutrient_report(None)
+    def test_client_nutrient_report(self, apimock):
+        cli = UsdaClient("API_KAY")
+        with apimock:
+            nr = cli.get_nutrient_report([42, 1337])
+        nr.foods.popitem()[0].name == "Pizza with pineapple"

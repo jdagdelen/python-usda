@@ -3,7 +3,7 @@
 
 from usda.enums import \
     UsdaApis, UsdaNdbListType, UsdaNdbReportType, UsdaUriActions
-from usda.domain import Nutrient, Food, FoodReport
+from usda.domain import Nutrient, Food, FoodReport, NutrientReport
 from usda.base import DataGovClientBase
 
 
@@ -39,15 +39,14 @@ class UsdaClient(DataGovClientBase):
             UsdaUriActions.report, type=report_type.value, ndbno=ndb_food_id)
         return FoodReport.from_response_data(data)
 
-    def get_nutrient_report(self, nutrients,
-                            report_type=UsdaNdbReportType.basic):
+    def get_nutrient_report(self, nutrients):
         """Get a Nutrient Report for each of the given nutrient IDs."""
-        raise NotImplementedError  # TODO
-        # if len(nutrients) > 20:
-        #     raise ValueError("A nutrient report request cannot contain "
-        #                      "more than 20 nutrients")
-        # data = self.run_request(
-        #   UsdaUriActions.report, type=report_type.value, nutrients=nutrients)
+        if len(nutrients) > 20:
+            raise ValueError("A nutrient report request cannot contain "
+                             "more than 20 nutrients")
+        data = self.run_request(
+            UsdaUriActions.nutrients, nutrients=nutrients)
+        return NutrientReport.from_response_data(data)
 
     def _build_item_list(self, data, usda_class):
         """Generate a list of USDA objects from parsed JSON data."""
