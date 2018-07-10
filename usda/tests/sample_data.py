@@ -66,3 +66,43 @@ NUTRIENT_LIST_DATA = {
         ]
     }
 }
+
+NUTRIENT_REPORT_DATA = {
+    "report": {
+        "sr": "Legacy",
+        "groups": [
+            {
+                "id": "0100",
+                "description": "Dairy and Egg Products"
+            }
+        ],
+        "subset": "All foods",
+        "end": 1,
+        "start": 0,
+        "total": 1,
+        "foods": [
+            {
+                "ndbno": "42",
+                "name": "Pizza with pineapple",
+                "weight": 6.9,
+                "measure": "1.0 slice",
+                "nutrients": [
+                    {
+                        "nutrient_id": "42",
+                        "nutrient": "Lactose",
+                        "unit": "g",
+                        "value": "26",
+                        "gm": 353.0
+                    },
+                    {
+                        "nutrient_id": "1337",
+                        "nutrient": "Calcium",
+                        "unit": "g",
+                        "value": "4.87",
+                        "gm": 65.8
+                    },
+                ]
+            }
+        ]
+    }
+}

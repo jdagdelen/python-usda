@@ -134,3 +134,42 @@ class FoodReport(UsdaObject):
 
     def __repr__(self):
         return "Food Report for '{0}'".format(repr(self.food))
+
+
+class NutrientReport(UsdaObject):
+    """Describes a USDA nutrient report."""
+
+    def __init__(self, foods):
+        super(NutrientReport, self).__init__()
+        assert all(
+            isinstance(food, Food) and all(
+                isinstance(nutrient, Nutrient)
+                for nutrient in nutrients
+            )
+            for food, nutrients in foods.items()
+        )
+        self.foods = foods
+
+    @staticmethod
+    def from_response_data(response_data):
+        report = response_data["report"]
+        return NutrientReport({
+            Food(id=food['ndbno'], name=food['name']): [
+                Nutrient(
+                    id=nutrient["nutrient_id"],
+                    name=nutrient["nutrient"],
+                    unit=nutrient["unit"],
+                    value=nutrient["value"],
+                    measures=[
+                        Measure(
+                            quantity=food["weight"],
+                            gram_equivalent=nutrient["gm"],
+                            label=food["measure"],
+                            value=nutrient["value"]
+                        )
+                    ],
+                )
+                for nutrient in food["nutrients"]
+            ]
+            for food in report["foods"]
+        })
