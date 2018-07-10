@@ -5,9 +5,7 @@
 import pytest
 import json
 from httmock import urlmatch, HTTMock
-from requests import HTTPError
 from usda.client import UsdaClient
-from usda.enums import UsdaNdbListType, UsdaNdbReportType
 from usda.tests.sample_data import \
     FOOD_LIST_DATA, NUTRIENT_LIST_DATA, FOOD_REPORT_DATA
 

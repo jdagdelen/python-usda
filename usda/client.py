@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from .enums import *
-from .domain import Nutrient, Food, FoodReport
-from .base import DataGovClientBase
+from usda.enums import \
+    UsdaApis, UsdaNdbListType, UsdaNdbReportType, UsdaUriActions
+from usda.domain import Nutrient, Food, FoodReport
+from usda.base import DataGovClientBase
 
 
 class UsdaClient(DataGovClientBase):
