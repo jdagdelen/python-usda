@@ -1,5 +1,8 @@
-import os
 from setuptools import setup, find_packages
+
+
+def read_requirements(filename):
+    return [req.strip() for req in open(filename)]
 
 
 setup(
@@ -11,18 +14,9 @@ setup(
     package_data={
         '': ['*.md', 'LICENSE', 'README'],
     },
-    install_requires=[
-        'enum34>=1.1.3',
-        'six>=1.10.0',
-        'requests>=2.16.0'
-    ],
+    install_requires=read_requirements('requirements.txt'),
     extras_require={
-        'dev': [
-            "pytest",
-            "pytest-cov",
-            "pytest-pep8",
-            "httmock"
-        ]
+        'dev': read_requirements('requirements-dev.txt'),
     },
     license='GNU General Public License 3',
     description="A fork of pygov focused on USDA nutritional database API",
