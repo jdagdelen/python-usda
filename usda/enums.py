@@ -14,6 +14,7 @@ class UsdaUriActions(Enum):
     list = "list"
     report = "reports"
     nutrients = "nutrients"
+    search = "search"
 
 
 class UsdaNdbListType(Enum):

@@ -74,7 +74,12 @@ class Food(UsdaObject):
 
     @staticmethod
     def from_response_data(response_data):
-        return Food(id=response_data['id'], name=response_data['name'])
+        return Food(
+            id=response_data['id']
+            if 'id' in response_data
+            else response_data['ndbno'],
+            name=response_data['name'],
+        )
 
     def __init__(self, id, name):
         super(Food, self).__init__()
@@ -119,10 +124,7 @@ class FoodReport(UsdaObject):
         food_group = None if type == "Basic" or type == "Statistics" \
             else food["fg"]
         return FoodReport(
-            food=Food(
-                id=food["ndbno"],
-                name=food['name']
-            ),
+            food=Food.from_response_data(food),
             nutrients=FoodReport._get_nutrients(food["nutrients"]),
             report_type=report["type"],
             foot_notes=report["footnotes"],
@@ -160,7 +162,7 @@ class NutrientReport(UsdaObject):
     def from_response_data(response_data):
         report = response_data["report"]
         return NutrientReport({
-            Food(id=food['ndbno'], name=food['name']): [
+            Food.from_response_data(food): [
                 Nutrient(
                     id=nutrient["nutrient_id"],
                     name=nutrient["nutrient"],
