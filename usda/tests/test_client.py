@@ -7,7 +7,9 @@ import json
 from httmock import urlmatch, HTTMock
 from usda.client import UsdaClient
 from usda.tests.sample_data import \
-    FOOD_LIST_DATA, NUTRIENT_LIST_DATA, FOOD_REPORT_DATA, NUTRIENT_REPORT_DATA
+    FOOD_LIST_DATA, NUTRIENT_LIST_DATA, \
+    FOOD_REPORT_DATA, NUTRIENT_REPORT_DATA, \
+    FOOD_SEARCH_DATA
 
 
 class TestClient(object):
@@ -28,9 +30,14 @@ class TestClient(object):
     def api_nutrients(self, uri, request):
         return json.dumps(NUTRIENT_REPORT_DATA)
 
+    @urlmatch(path=r'/usda/ndb/search')
+    def api_search(self, uri, request):
+        return json.dumps(FOOD_SEARCH_DATA)
+
     @pytest.fixture
     def apimock(self):
-        return HTTMock(self.api_list, self.api_report, self.api_nutrients)
+        return HTTMock(self.api_list, self.api_report,
+                       self.api_nutrients, self.api_search)
 
     def test_client_init(self):
         cli = UsdaClient("API_KAY")
@@ -64,3 +71,10 @@ class TestClient(object):
         with apimock:
             nr = cli.get_nutrient_report([42, 1337])
         nr.foods.popitem()[0].name == "Pizza with pineapple"
+
+    def test_client_search_foods(self, apimock):
+        cli = UsdaClient("API_KAY")
+        with apimock:
+            foods = cli.search_foods('pizza', 5)
+        assert foods[0].name == "Pizza"
+        assert foods[1].name == "Pizza with pineapple"
