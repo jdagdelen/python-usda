@@ -24,6 +24,7 @@ setup(
     keywords="api usda nutrition food",
     url="https://github.com/Lucidiot/python-usda",
     classifiers=[
+        "Development Status :: 4 - Beta",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Natural Language :: English",
         "Intended Audience :: Developers",
