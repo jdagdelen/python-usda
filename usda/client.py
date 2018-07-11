@@ -32,6 +32,12 @@ class UsdaClient(DataGovClientBase):
             max=max, offset=offset, sort=sort)
         return self._build_foods_list(data)
 
+    def search_foods(self, query, max, offset=0, sort='r'):
+        """Get a list of food items matching a specified query."""
+        data = self.run_request(
+            UsdaUriActions.search, q=query, max=max, offset=offset, sort=sort)
+        return self._build_foods_list(data)
+
     def get_food_report(self, ndb_food_id,
                         report_type=UsdaNdbReportType.basic):
         """Get a Food Report for a given food item ID."""

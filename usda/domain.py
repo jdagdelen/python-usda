@@ -25,7 +25,9 @@ class Measure(UsdaObject):
         return Measure(
             quantity=response_data["qty"],
             gram_equivalent=response_data["eqv"],
-            label=response_data["label"], value=response_data["value"])
+            label=response_data["label"],
+            value=response_data["value"],
+        )
 
     def __init__(self, quantity, gram_equivalent, label, value):
         super(Measure, self).__init__()
@@ -72,7 +74,12 @@ class Food(UsdaObject):
 
     @staticmethod
     def from_response_data(response_data):
-        return Food(id=response_data['id'], name=response_data['name'])
+        return Food(
+            id=response_data['id']
+            if 'id' in response_data
+            else response_data['ndbno'],
+            name=response_data['name'],
+        )
 
     def __init__(self, id, name):
         super(Food, self).__init__()
@@ -92,23 +99,22 @@ class FoodReport(UsdaObject):
     @staticmethod
     def _get_measures(raw_measures):
         """Get measurements from JSON data."""
-        measures = list()
-        for raw_measure in raw_measures:
-            measures.append(Measure.from_response_data(raw_measure))
-        return measures
+        return list(map(Measure.from_response_data, raw_measures))
 
     @staticmethod
     def _get_nutrients(raw_nutrients):
         """Get nutrients from JSON data with their associated measurements."""
-        nutrients = list()
-        for raw_nutrient in raw_nutrients:
-            measures = FoodReport._get_measures(raw_nutrient["measures"])
-            nutrient = Nutrient(
-                id=raw_nutrient["nutrient_id"], name=raw_nutrient["name"],
-                group=raw_nutrient["group"], unit=raw_nutrient["unit"],
-                value=raw_nutrient["value"], measures=measures)
-            nutrients.append(nutrient)
-        return nutrients
+        return [
+            Nutrient(
+                id=raw_nutrient["nutrient_id"],
+                name=raw_nutrient["name"],
+                group=raw_nutrient["group"],
+                unit=raw_nutrient["unit"],
+                value=raw_nutrient["value"],
+                measures=FoodReport._get_measures(raw_nutrient["measures"]),
+            )
+            for raw_nutrient in raw_nutrients
+        ]
 
     @staticmethod
     def from_response_data(response_data):
@@ -118,10 +124,12 @@ class FoodReport(UsdaObject):
         food_group = None if type == "Basic" or type == "Statistics" \
             else food["fg"]
         return FoodReport(
-            food=Food(id=food["ndbno"], name=food['name']),
+            food=Food.from_response_data(food),
             nutrients=FoodReport._get_nutrients(food["nutrients"]),
             report_type=report["type"],
-            foot_notes=report["footnotes"], food_group=food_group)
+            foot_notes=report["footnotes"],
+            food_group=food_group,
+        )
 
     def __init__(self, food, nutrients, report_type, foot_notes, food_group):
         super(FoodReport, self).__init__()
@@ -154,7 +162,7 @@ class NutrientReport(UsdaObject):
     def from_response_data(response_data):
         report = response_data["report"]
         return NutrientReport({
-            Food(id=food['ndbno'], name=food['name']): [
+            Food.from_response_data(food): [
                 Nutrient(
                     id=nutrient["nutrient_id"],
                     name=nutrient["nutrient"],
@@ -165,7 +173,7 @@ class NutrientReport(UsdaObject):
                             quantity=food["weight"],
                             gram_equivalent=nutrient["gm"],
                             label=food["measure"],
-                            value=nutrient["value"]
+                            value=nutrient["value"],
                         )
                     ],
                 )

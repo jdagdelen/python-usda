@@ -50,6 +50,31 @@ FOOD_LIST_DATA = {
     }
 }
 
+FOOD_SEARCH_DATA = {
+    "list": {
+        "q": "test",
+        "sr": "Legacy",
+        "ds": "any",
+        "start": 0,
+        "end": 2,
+        "total": 2,
+        "group": "",
+        "sort": "n",
+        "item": [
+            {
+                "offset": 0,
+                "id": "1337",
+                "name": "Pizza"
+            },
+            {
+                "offset": 1,
+                "id": "42",
+                "name": "Pizza with pineapple"
+            }
+        ]
+    }
+}
+
 NUTRIENT_LIST_DATA = {
     "list": {
         "item": [
