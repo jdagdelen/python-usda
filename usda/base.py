@@ -15,18 +15,15 @@ class DataGovApiRateExceededError(DataGovApiError):
     """Data.gov API rate limit has been exceeded for this key"""
 
     def __init__(self):
-        super(DataGovApiRateExceededError, self).__init__(
-            'API rate limit has been exceeded.')
+        super().__init__('API rate limit has been exceeded.')
 
 
 class DataGovInvalidApiKeyError(DataGovApiError):
     """Supplied Data.gov API key is invalid."""
 
     def __init__(self):
-        super(DataGovInvalidApiKeyError, self).__init__(
-            "A invalid Data.gov API key has been supplied. "
-            "Get one at https://api.data.gov/signup"
-        )
+        super().__init__("A invalid Data.gov API key has been supplied. "
+                         "Get one at https://api.data.gov/signup")
 
 
 def api_request(uri, **parameters):

@@ -14,7 +14,7 @@ class UsdaClient(DataGovClientBase):
         """Create a USDA NDB API client.
         For small testing purposes, you may use `DEMO_KEY` as an API key ;
         but beware of rate limit errors."""
-        super(UsdaClient, self).__init__('usda/', UsdaApis.ndb, api_gov_key)
+        super().__init__('usda/', UsdaApis.ndb, api_gov_key)
 
     def list_nutrients_raw(self, **kwargs):
         """

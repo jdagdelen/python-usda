@@ -1,21 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from six import with_metaclass
-from abc import ABCMeta
+from abc import ABC, abstractstaticmethod
 
 
-class UsdaObject(with_metaclass(ABCMeta)):
+class UsdaObject(ABC):
     """Describes any kind of USDA API result."""
 
-    def __init__(self):
-        if self.__class__ == UsdaObject:
-            raise TypeError("This abstract class cannot be instanciated.")
-
-    @staticmethod
+    @abstractstaticmethod
     def from_response_data(response_data):
         """Generate an object from JSON response data."""
-        raise NotImplementedError
 
 
 class Measure(UsdaObject):
@@ -30,7 +24,7 @@ class Measure(UsdaObject):
         )
 
     def __init__(self, quantity, gram_equivalent, label, value):
-        super(Measure, self).__init__()
+        super().__init__()
         self.quantity = float(quantity)
         self.gram_equivalent = float(gram_equivalent)
         self.label = str(label)
@@ -54,7 +48,7 @@ class Nutrient(UsdaObject):
 
     def __init__(self, id, name,
                  group=None, unit=None, value=None, measures=None):
-        super(Nutrient, self).__init__()
+        super().__init__()
         self.id = int(id)
         self.name = str(name)
         self.group = str(group) if group is not None else None
@@ -82,7 +76,7 @@ class Food(UsdaObject):
         )
 
     def __init__(self, id, name):
-        super(Food, self).__init__()
+        super().__init__()
         self.id = int(id)
         self.name = str(name)
 
@@ -132,7 +126,7 @@ class FoodReport(UsdaObject):
         )
 
     def __init__(self, food, nutrients, report_type, foot_notes, food_group):
-        super(FoodReport, self).__init__()
+        super().__init__()
         assert isinstance(food, Food)
         self.food = food
         self.nutrients = nutrients
@@ -148,7 +142,7 @@ class NutrientReport(UsdaObject):
     """Describes a USDA nutrient report."""
 
     def __init__(self, foods):
-        super(NutrientReport, self).__init__()
+        super().__init__()
         assert all(
             isinstance(food, Food) and all(
                 isinstance(nutrient, Nutrient)
