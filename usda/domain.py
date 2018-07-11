@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from abc import ABC, abstractstaticmethod
+from abc import ABC, abstractmethod
 
 
 class UsdaObject(ABC):
     """Describes any kind of USDA API result."""
 
-    @abstractstaticmethod
+    @staticmethod
+    @abstractmethod
     def from_response_data(response_data):
         """Generate an object from JSON response data."""
+        raise NotImplementedError
 
 
 class Measure(UsdaObject):
