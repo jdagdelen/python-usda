@@ -69,6 +69,9 @@ class TestClient(object):
     def test_client_nutrient_report(self, apimock):
         cli = UsdaClient("API_KAY")
         with apimock:
+            with pytest.raises(ValueError):
+                # Go over 20 nutrients
+                cli.get_nutrient_report(list(range(21)))
             nr = cli.get_nutrient_report([42, 1337])
         nr.foods.popitem()[0].name == "Pizza with pineapple"
 
