@@ -49,26 +49,26 @@ class TestClient(object):
     def test_client_list_foods_raw(self, apimock):
         cli = UsdaClient("API_KAY")
         with apimock:
-            data = cli.list_foods_raw(max=5)
-        assert data == FOOD_LIST_DATA
+            data = list(cli.list_foods_raw(max=5))
+        assert data == FOOD_LIST_DATA['list']['item']
 
     def test_client_list_foods(self, apimock):
         cli = UsdaClient("API_KAY")
         with apimock:
-            foods = cli.list_foods(5)
+            foods = list(cli.list_foods(5))
         assert foods[0].name == "Pizza"
         assert foods[1].name == "Pizza with pineapple"
 
     def test_client_list_nutrients_raw(self, apimock):
         cli = UsdaClient("API_KAY")
         with apimock:
-            data = cli.list_nutrients_raw(max=5)
-        assert data == NUTRIENT_LIST_DATA
+            data = list(cli.list_nutrients_raw(max=5))
+        assert data == NUTRIENT_LIST_DATA['list']['item']
 
     def test_client_list_nutrients(self, apimock):
         cli = UsdaClient("API_KAY")
         with apimock:
-            nutrients = cli.list_nutrients(5)
+            nutrients = list(cli.list_nutrients(5))
         assert nutrients[0].name == "Calcium"
         assert nutrients[1].name == "Lactose"
 
@@ -102,12 +102,12 @@ class TestClient(object):
     def test_client_search_foods_raw(self, apimock):
         cli = UsdaClient("API_KAY")
         with apimock:
-            data = cli.search_foods_raw(q='pizza', max=5)
-        assert data == FOOD_SEARCH_DATA
+            data = list(cli.search_foods_raw(q='pizza', max=5))
+        assert data == FOOD_SEARCH_DATA['list']['item']
 
     def test_client_search_foods(self, apimock):
         cli = UsdaClient("API_KAY")
         with apimock:
-            foods = cli.search_foods('pizza', 5)
+            foods = list(cli.search_foods('pizza', 5))
         assert foods[0].name == "Pizza"
         assert foods[1].name == "Pizza with pineapple"
