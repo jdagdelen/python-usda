@@ -5,6 +5,7 @@ from usda.enums import \
     UsdaApis, UsdaNdbListType, UsdaNdbReportType, UsdaUriActions
 from usda.domain import Nutrient, Food, FoodReport, NutrientReport
 from usda.base import DataGovClientBase
+from usda.pagination import RawListPaginator, ModelListPaginator
 
 
 class UsdaClient(DataGovClientBase):
@@ -21,15 +22,16 @@ class UsdaClient(DataGovClientBase):
         Get a list of available nutrients in the database as JSON.
         """
         kwargs.setdefault('lt', UsdaNdbListType.all_nutrients.value)
-        return self.run_request(UsdaUriActions.list, **kwargs)
+        return RawListPaginator(self, UsdaUriActions.list, **kwargs)
 
     def list_nutrients(self, max, offset=0, sort='n'):
         """
         Get a list of available nutrients in the database.
         Useful to generate Nutrient Reports.
         """
-        return self._build_nutrients_list(
-            self.list_nutrients_raw(max=max, offset=offset, sort=sort)
+        return ModelListPaginator(
+            Nutrient,
+            self.list_nutrients_raw(max=max, offset=offset, sort=sort),
         )
 
     def list_foods_raw(self, **kwargs):
@@ -37,29 +39,32 @@ class UsdaClient(DataGovClientBase):
         Get a list of available food items in the database as JSON.
         """
         kwargs.setdefault('lt', UsdaNdbListType.food.value)
-        return self.run_request(UsdaUriActions.list, **kwargs)
+        return RawListPaginator(self, UsdaUriActions.list, **kwargs)
 
     def list_foods(self, max, offset=0, sort='n'):
         """
         Get a list of available food items in the database.
         Useful to generate Food Reports.
         """
-        return self._build_foods_list(
-            self.list_foods_raw(max=max, offset=offset, sort=sort)
+        return ModelListPaginator(
+            Food,
+            self.list_foods_raw(max=max, offset=offset, sort=sort),
         )
 
     def search_foods_raw(self, **kwargs):
         """
         Get a list of food items matching a specified query, as JSON.
         """
-        return self.run_request(UsdaUriActions.search, **kwargs)
+        return RawListPaginator(self, UsdaUriActions.search, **kwargs)
 
     def search_foods(self, query, max, offset=0, sort='r'):
         """
         Get a list of food items matching a specified query.
         """
-        return self._build_foods_list(
-            self.search_foods_raw(q=query, max=max, offset=offset, sort=sort))
+        return ModelListPaginator(
+            Food,
+            self.search_foods_raw(q=query, max=max, offset=offset, sort=sort),
+        )
 
     def get_food_report_raw(self, **kwargs):
         """
@@ -92,21 +97,3 @@ class UsdaClient(DataGovClientBase):
         return NutrientReport.from_response_data(
             self.get_nutrient_report_raw(nutrients=nutrients)
         )
-
-    def _build_item_list(self, data, usda_class):
-        """
-        Generate a list of USDA objects from parsed JSON data.
-        """
-        return list(map(usda_class.from_response_data, data['list']['item']))
-
-    def _build_nutrients_list(self, response_data):
-        """
-        Generate a list of nutrients.
-        """
-        return self._build_item_list(response_data, Nutrient)
-
-    def _build_foods_list(self, response_data):
-        """
-        Generate a list of food items.
-        """
-        return self._build_item_list(response_data, Food)
