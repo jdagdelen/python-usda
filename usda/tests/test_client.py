@@ -87,17 +87,17 @@ class TestClient(object):
     def test_client_nutrient_report_raw(self, apimock):
         cli = UsdaClient("API_KAY")
         with apimock:
-            data = cli.get_nutrient_report_raw(nutrients=[42, 1337])
-        assert data == NUTRIENT_REPORT_DATA
+            data = list(cli.get_nutrient_report_raw(nutrients=[42, 1337]))
+        assert data == NUTRIENT_REPORT_DATA['report']['foods']
 
     def test_client_nutrient_report(self, apimock):
         cli = UsdaClient("API_KAY")
         with apimock:
             with pytest.raises(ValueError):
                 # Go over 20 nutrients
-                cli.get_nutrient_report(list(range(21)))
-            nr = cli.get_nutrient_report([42, 1337])
-        nr.foods.popitem()[0].name == "Pizza with pineapple"
+                cli.get_nutrient_report(*range(21))
+            nr = list(cli.get_nutrient_report(42, 1337))
+        assert nr[0].name == "Pizza with pineapple"
 
     def test_client_search_foods_raw(self, apimock):
         cli = UsdaClient("API_KAY")
