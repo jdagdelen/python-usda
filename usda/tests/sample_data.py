@@ -35,6 +35,12 @@ FOOD_REPORT_DATA = {
 
 FOOD_LIST_DATA = {
     "list": {
+        "lt": "f",
+        "start": 0,
+        "end": 2,
+        "total": 2,
+        "sr": "Legacy",
+        "sort": "n",
         "item": [
             {
                 "offset": 0,
@@ -77,6 +83,12 @@ FOOD_SEARCH_DATA = {
 
 NUTRIENT_LIST_DATA = {
     "list": {
+        "lt": "n",
+        "start": 0,
+        "end": 2,
+        "total": 2,
+        "sr": "Legacy",
+        "sort": "n",
         "item": [
             {
                 "offset": 0,

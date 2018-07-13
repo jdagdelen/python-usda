@@ -4,7 +4,7 @@
 
 import pytest
 from usda.domain import \
-    UsdaObject, Food, Nutrient, Measure, FoodReport, NutrientReport
+    UsdaObject, Food, Nutrient, Measure, FoodReport, NutrientReportFood
 from usda.tests.sample_data import FOOD_REPORT_DATA, NUTRIENT_REPORT_DATA
 
 
@@ -82,32 +82,27 @@ class TestUsdaDomain(object):
         assert m.gram_equivalent == 42.0
         assert m.value == 13.37
 
-    def test_nutrient_report(self):
+    def test_nutrient_report_food(self):
         """Tests for NutrientReport class"""
-        nr = NutrientReport.from_response_data(NUTRIENT_REPORT_DATA)
-        assert isinstance(nr.foods, dict)
-        assert len(nr.foods) == 1
-        f, nlist = nr.foods.popitem()
-        assert isinstance(f, Food)
-        assert isinstance(nlist, list)
-        assert all(isinstance(n, Nutrient) for n in nlist)
-        assert f.id == 42
-        assert f.name == "Pizza with pineapple"
-        assert nlist[0].id == 42
-        assert nlist[0].name == "Lactose"
-        assert nlist[0].unit == "g"
-        assert nlist[0].value == 26
-        assert len(nlist[0].measures) == 1
-        assert nlist[0].measures[0].label == "1.0 slice"
-        assert nlist[0].measures[0].quantity == 6.9
-        assert nlist[0].measures[0].gram_equivalent == 353.0
-        assert nlist[0].measures[0].value == 26
-        assert nlist[1].id == 1337
-        assert nlist[1].name == "Calcium"
-        assert nlist[1].unit == "g"
-        assert nlist[1].value == 4.87
-        assert len(nlist[1].measures) == 1
-        assert nlist[1].measures[0].label == "1.0 slice"
-        assert nlist[1].measures[0].quantity == 6.9
-        assert nlist[1].measures[0].gram_equivalent == 65.8
-        assert nlist[1].measures[0].value == 4.87
+        nrf = NutrientReportFood.from_response_data(
+            NUTRIENT_REPORT_DATA['report']['foods'][0])
+        assert nrf.id == 42
+        assert nrf.name == "Pizza with pineapple"
+        assert nrf.nutrients[0].id == 42
+        assert nrf.nutrients[0].name == "Lactose"
+        assert nrf.nutrients[0].unit == "g"
+        assert nrf.nutrients[0].value == 26
+        assert len(nrf.nutrients[0].measures) == 1
+        assert nrf.nutrients[0].measures[0].label == "1.0 slice"
+        assert nrf.nutrients[0].measures[0].quantity == 6.9
+        assert nrf.nutrients[0].measures[0].gram_equivalent == 353.0
+        assert nrf.nutrients[0].measures[0].value == 26
+        assert nrf.nutrients[1].id == 1337
+        assert nrf.nutrients[1].name == "Calcium"
+        assert nrf.nutrients[1].unit == "g"
+        assert nrf.nutrients[1].value == 4.87
+        assert len(nrf.nutrients[1].measures) == 1
+        assert nrf.nutrients[1].measures[0].label == "1.0 slice"
+        assert nrf.nutrients[1].measures[0].quantity == 6.9
+        assert nrf.nutrients[1].measures[0].gram_equivalent == 65.8
+        assert nrf.nutrients[1].measures[0].value == 4.87

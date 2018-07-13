@@ -86,7 +86,8 @@ class Food(UsdaObject):
         return self.name
 
     def __repr__(self):
-        return "Food ID {0} '{1}'".format(self.id, self.name)
+        return "{0} ID {1} '{2}'".format(
+            self.__class__.__name__, self.id, self.name)
 
 
 class FoodReport(UsdaObject):
@@ -140,40 +141,33 @@ class FoodReport(UsdaObject):
         return "Food Report for '{0}'".format(repr(self.food))
 
 
-class NutrientReport(UsdaObject):
-    """Describes a USDA nutrient report."""
+class NutrientReportFood(Food):
+    """
+    Describes a USDA food item holding nutrient data.
+    """
 
-    def __init__(self, foods):
-        super().__init__()
-        assert all(
-            isinstance(food, Food) and all(
-                isinstance(nutrient, Nutrient)
-                for nutrient in nutrients
-            )
-            for food, nutrients in foods.items()
-        )
-        self.foods = foods
+    def __init__(self, id, name, nutrients):
+        super().__init__(id, name)
+        assert all(isinstance(nutrient, Nutrient) for nutrient in nutrients)
+        self.nutrients = nutrients
 
     @staticmethod
     def from_response_data(response_data):
-        report = response_data["report"]
-        return NutrientReport({
-            Food.from_response_data(food): [
-                Nutrient(
-                    id=nutrient["nutrient_id"],
-                    name=nutrient["nutrient"],
-                    unit=nutrient["unit"],
-                    value=nutrient["value"],
-                    measures=[
-                        Measure(
-                            quantity=food["weight"],
-                            gram_equivalent=nutrient["gm"],
-                            label=food["measure"],
-                            value=nutrient["value"],
-                        )
-                    ],
-                )
-                for nutrient in food["nutrients"]
-            ]
-            for food in report["foods"]
-        })
+        food = Food.from_response_data(response_data)
+        return NutrientReportFood(food.id, food.name, [
+            Nutrient(
+                id=nutrient["nutrient_id"],
+                name=nutrient["nutrient"],
+                unit=nutrient["unit"],
+                value=nutrient["value"],
+                measures=[
+                    Measure(
+                        quantity=response_data["weight"],
+                        gram_equivalent=nutrient["gm"],
+                        label=response_data["measure"],
+                        value=nutrient["value"],
+                    )
+                ],
+            )
+            for nutrient in response_data["nutrients"]
+        ])
