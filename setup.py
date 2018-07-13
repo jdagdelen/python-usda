@@ -7,7 +7,7 @@ def read_requirements(filename):
 
 setup(
     name='python-usda',
-    version='0.2',
+    version='0.3',
     author='Lucidiot',
     packages=find_packages(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
