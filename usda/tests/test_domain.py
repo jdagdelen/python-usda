@@ -38,11 +38,11 @@ class TestUsdaDomain(object):
     def test_nutrient(self):
         """Tests for Nutrient class"""
         data = {
-            "id": 42,
+            "id": "42",
             "name": "Lactose"
         }
         n = Nutrient.from_response_data(data)
-        assert n.id == 42
+        assert n.id == "42"
         assert n.name == "Lactose"
         assert repr(n) == "Nutrient ID 42 'Lactose'"
         assert str(n) == "Lactose"
@@ -50,11 +50,11 @@ class TestUsdaDomain(object):
     def test_food(self):
         """Tests for Food class"""
         data = {
-            "id": 123456,
+            "id": "123456",
             "name": "Pizza"
         }
         f = Food.from_response_data(data)
-        assert f.id == 123456
+        assert f.id == "123456"
         assert f.name == "Pizza"
         assert repr(f) == "Food ID 123456 'Pizza'"
         assert str(f) == "Pizza"
@@ -65,12 +65,12 @@ class TestUsdaDomain(object):
         assert fr.report_type == "Basic"
         assert fr.foot_notes == ["Footnote 1", "Footnote 2"]
         assert fr.food_group is None
-        assert fr.food.id == 123456
+        assert fr.food.id == "123456"
         assert fr.food.name == "Pizza"
-        assert repr(fr) == "Food Report for 'Food ID 123456 'Pizza''"
+        assert repr(fr) == "FoodReport for Food ID 123456 'Pizza'"
         assert len(fr.nutrients) == 1
         n = fr.nutrients[0]
-        assert n.id == 42
+        assert n.id == "42"
         assert n.name == "Lactose"
         assert n.group == "Proximates"
         assert n.unit == "g"
@@ -86,18 +86,18 @@ class TestUsdaDomain(object):
         """Tests for NutrientReport class"""
         nrf = NutrientReportFood.from_response_data(
             NUTRIENT_REPORT_DATA['report']['foods'][0])
-        assert nrf.id == 42
+        assert nrf.id == "42"
         assert nrf.name == "Pizza with pineapple"
-        assert nrf.nutrients[0].id == 42
+        assert nrf.nutrients[0].id == "42"
         assert nrf.nutrients[0].name == "Lactose"
         assert nrf.nutrients[0].unit == "g"
-        assert nrf.nutrients[0].value == 26
+        assert nrf.nutrients[0].value == 26.0
         assert len(nrf.nutrients[0].measures) == 1
         assert nrf.nutrients[0].measures[0].label == "1.0 slice"
         assert nrf.nutrients[0].measures[0].quantity == 6.9
         assert nrf.nutrients[0].measures[0].gram_equivalent == 353.0
-        assert nrf.nutrients[0].measures[0].value == 26
-        assert nrf.nutrients[1].id == 1337
+        assert nrf.nutrients[0].measures[0].value == 26.0
+        assert nrf.nutrients[1].id == "1337"
         assert nrf.nutrients[1].name == "Calcium"
         assert nrf.nutrients[1].unit == "g"
         assert nrf.nutrients[1].value == 4.87

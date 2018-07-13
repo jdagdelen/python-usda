@@ -8,6 +8,7 @@ from httmock import urlmatch, HTTMock
 from usda.client import UsdaClient
 from usda.tests.sample_data import \
     FOOD_LIST_DATA, NUTRIENT_LIST_DATA, \
+    FOOD_GROUP_LIST_DATA, DERIVATION_CODES_LIST_DATA, \
     FOOD_REPORT_DATA, NUTRIENT_REPORT_DATA, \
     FOOD_SEARCH_DATA
 
@@ -21,6 +22,10 @@ class TestClient(object):
             return json.dumps(FOOD_LIST_DATA)
         elif "lt=n" in uri.query:
             return json.dumps(NUTRIENT_LIST_DATA)
+        elif "lt=g" in uri.query:
+            return json.dumps(FOOD_GROUP_LIST_DATA)
+        elif "lt=d" in uri.query:
+            return json.dumps(DERIVATION_CODES_LIST_DATA)
 
     @urlmatch(path=r'/usda/ndb/reports')
     def api_report(self, uri, request):
@@ -71,6 +76,32 @@ class TestClient(object):
             nutrients = list(cli.list_nutrients(5))
         assert nutrients[0].name == "Calcium"
         assert nutrients[1].name == "Lactose"
+
+    def test_client_list_food_groups_raw(self, apimock):
+        cli = UsdaClient("API_KAY")
+        with apimock:
+            groups = list(cli.list_food_groups_raw(max=5))
+        assert groups == FOOD_GROUP_LIST_DATA['list']['item']
+
+    def test_client_list_food_groups(self, apimock):
+        cli = UsdaClient("API_KAY")
+        with apimock:
+            groups = list(cli.list_food_groups(5))
+        assert groups[0].name == "Dairy and Eggs Products"
+        assert groups[1].name == "Baby Foods"
+
+    def test_client_list_derivation_codes_raw(self, apimock):
+        cli = UsdaClient("API_KAY")
+        with apimock:
+            codes = list(cli.list_derivation_codes_raw(max=5))
+        assert codes == DERIVATION_CODES_LIST_DATA['list']['item']
+
+    def test_client_list_derivation_codes(self, apimock):
+        cli = UsdaClient("API_KAY")
+        with apimock:
+            codes = list(cli.list_derivation_codes(5))
+        assert codes[0].name == "Analytical data"
+        assert codes[1].name == "Analytical data; derived by linear regression"
 
     def test_client_food_report_raw(self, apimock):
         cli = UsdaClient("API_KAY")
