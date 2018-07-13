@@ -3,7 +3,8 @@
 
 from usda.enums import \
     UsdaApis, UsdaNdbListType, UsdaNdbReportType, UsdaUriActions
-from usda.domain import Nutrient, Food, FoodReport, NutrientReportFood
+from usda.domain import \
+    ListItem, Nutrient, Food, FoodReport, NutrientReportFood
 from usda.base import DataGovClientBase
 from usda.pagination import \
     RawPaginator, ModelPaginator, RawNutrientReportPaginator
@@ -50,6 +51,19 @@ class UsdaClient(DataGovClientBase):
         return ModelPaginator(
             Food,
             self.list_foods_raw(max=max, offset=offset, sort=sort),
+        )
+
+    def list_food_groups_raw(self, **kwargs):
+        """
+        Get a list of available food groups in the database as JSON.
+        """
+        kwargs.setdefault('lt', UsdaNdbListType.food_group.value)
+        return RawPaginator(self, UsdaUriActions.list, **kwargs)
+
+    def list_food_groups(self, max, offset=0, sort='n'):
+        return ModelPaginator(
+            ListItem,
+            self.list_food_groups_raw(max=max, offset=offset, sort=sort),
         )
 
     def search_foods_raw(self, **kwargs):
