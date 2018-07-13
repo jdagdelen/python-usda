@@ -2,6 +2,45 @@
 # -*- coding: utf-8 -*-
 """Sample API response data for testing"""
 
+
+def _make_list(*data, **kwargs):
+    result = {
+        "list": {
+            "start": 0,
+            "end": len(data),
+            "total": len(data),
+            "sr": "Legacy",
+            "sort": "n",
+            "item": [
+                {
+                    "offset": i,
+                    "id": id,
+                    "name": name,
+                }
+                for i, (id, name)
+                in enumerate(data)
+            ],
+        }
+    }
+    result.update(kwargs)
+    return result
+
+
+FOOD_LIST_DATA = _make_list(("1337", "Pizza"), ("42", "Pizza with pineapple"))
+
+NUTRIENT_LIST_DATA = _make_list(("1337", "Calcium"), ("42", "Lactose"))
+
+FOOD_GROUP_LIST_DATA = _make_list(
+    ("0100", "Dairy and Eggs Products"), ("0300", "Baby Foods"))
+
+DERIVATION_CODES_LIST_DATA = _make_list(
+    ("A", "Analytical data"),
+    ("AR", "Analytical data; derived by linear regression"))
+
+FOOD_SEARCH_DATA = _make_list(
+    ("1337", "Pizza"), ("42", "Pizza with pineapple"),
+    q="test", ds="any", group="")
+
 FOOD_REPORT_DATA = {
     "report": {
         "type": "Basic",
@@ -10,7 +49,7 @@ FOOD_REPORT_DATA = {
             "name": "Pizza",
             "nutrients": [
                 {
-                    "nutrient_id": 42,
+                    "nutrient_id": "42",
                     "name": "Lactose",
                     "group": "Proximates",
                     "unit": "g",
@@ -29,77 +68,6 @@ FOOD_REPORT_DATA = {
         },
         "footnotes": [
             "Footnote 1", "Footnote 2"
-        ]
-    }
-}
-
-FOOD_LIST_DATA = {
-    "list": {
-        "lt": "f",
-        "start": 0,
-        "end": 2,
-        "total": 2,
-        "sr": "Legacy",
-        "sort": "n",
-        "item": [
-            {
-                "offset": 0,
-                "id": "1337",
-                "name": "Pizza"
-            },
-            {
-                "offset": 1,
-                "id": "42",
-                "name": "Pizza with pineapple"
-            }
-        ]
-    }
-}
-
-FOOD_SEARCH_DATA = {
-    "list": {
-        "q": "test",
-        "sr": "Legacy",
-        "ds": "any",
-        "start": 0,
-        "end": 2,
-        "total": 2,
-        "group": "",
-        "sort": "n",
-        "item": [
-            {
-                "offset": 0,
-                "id": "1337",
-                "name": "Pizza"
-            },
-            {
-                "offset": 1,
-                "id": "42",
-                "name": "Pizza with pineapple"
-            }
-        ]
-    }
-}
-
-NUTRIENT_LIST_DATA = {
-    "list": {
-        "lt": "n",
-        "start": 0,
-        "end": 2,
-        "total": 2,
-        "sr": "Legacy",
-        "sort": "n",
-        "item": [
-            {
-                "offset": 0,
-                "id": "1337",
-                "name": "Calcium"
-            },
-            {
-                "offset": 1,
-                "id": "42",
-                "name": "Lactose"
-            }
         ]
     }
 }

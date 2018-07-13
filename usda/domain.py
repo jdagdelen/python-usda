@@ -26,7 +26,7 @@ class ListItem(UsdaObject):
 
     def __init__(self, id, name):
         super().__init__()
-        self.id = int(id)
+        self.id = id
         self.name = str(name)
 
     def __str__(self):
