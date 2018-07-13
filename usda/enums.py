@@ -23,7 +23,8 @@ class UsdaNdbListType(Enum):
     specialty_nutrients = "ns"
     standard_release_nutrients = "nr"
     food = "f"
-    food_group = "g"
+    food_groups = "g"
+    derivation_codes = "d"
 
 
 class UsdaNdbReportType(Enum):

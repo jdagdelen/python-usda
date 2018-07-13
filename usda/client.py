@@ -57,13 +57,32 @@ class UsdaClient(DataGovClientBase):
         """
         Get a list of available food groups in the database as JSON.
         """
-        kwargs.setdefault('lt', UsdaNdbListType.food_group.value)
+        kwargs.setdefault('lt', UsdaNdbListType.food_groups.value)
         return RawPaginator(self, UsdaUriActions.list, **kwargs)
 
     def list_food_groups(self, max, offset=0, sort='n'):
+        """
+        Get a list of available food groups in the database.
+        """
         return ModelPaginator(
             ListItem,
             self.list_food_groups_raw(max=max, offset=offset, sort=sort),
+        )
+
+    def list_derivation_codes_raw(self, **kwargs):
+        """
+        Get a list of available derivation codes in the database as JSON.
+        """
+        kwargs.setdefault('lt', UsdaNdbListType.derivation_codes.value)
+        return RawPaginator(self, UsdaUriActions.list, **kwargs)
+
+    def list_derivation_codes(self, max, offset=0, sort='n'):
+        """
+        Get a list of available derivation codes in the database.
+        """
+        return ModelPaginator(
+            ListItem,
+            self.list_derivation_codes_raw(max=max, offset=offset, sort=sort),
         )
 
     def search_foods_raw(self, **kwargs):
