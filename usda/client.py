@@ -3,7 +3,7 @@
 
 from usda.enums import \
     UsdaApis, UsdaNdbListType, UsdaNdbReportType, UsdaUriActions
-from usda.domain import Nutrient, Food, FoodReport, NutrientReport
+from usda.domain import Nutrient, Food, FoodReport, NutrientReportFood
 from usda.base import DataGovClientBase
 from usda.pagination import \
     RawPaginator, ModelPaginator, RawNutrientReportPaginator
@@ -86,15 +86,17 @@ class UsdaClient(DataGovClientBase):
         """
         Get a Nutrient Report for each of the given nutrient IDs as JSON.
         """
-        return self.run_request(UsdaUriActions.nutrients, **kwargs)
+        return RawNutrientReportPaginator(
+            self, UsdaUriActions.nutrients, **kwargs)
 
-    def get_nutrient_report(self, nutrients):
+    def get_nutrient_report(self, *nutrients):
         """
         Get a Nutrient Report for each of the given nutrient IDs.
         """
         if len(nutrients) > 20:
             raise ValueError("A nutrient report request cannot contain "
                              "more than 20 nutrients")
-        return NutrientReport.from_response_data(
-            self.get_nutrient_report_raw(nutrients=nutrients)
+        return ModelPaginator(
+            NutrientReportFood,
+            self.get_nutrient_report_raw(nutrients=nutrients),
         )
