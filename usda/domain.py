@@ -14,6 +14,59 @@ class UsdaObject(ABC):
         raise NotImplementedError
 
 
+class ListItem(UsdaObject):
+    """Describes a USDA list item."""
+
+    @staticmethod
+    def from_response_data(response_data):
+        return ListItem(
+            id=response_data['id'],
+            name=response_data['name'],
+        )
+
+    def __init__(self, id, name):
+        super().__init__()
+        self.id = id
+        self.name = str(name)
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return "{0} ID {1} '{2}'".format(
+            self.__class__.__name__, self.id, self.name)
+
+
+class Food(ListItem):
+    """Describes a USDA food item."""
+
+    @staticmethod
+    def from_response_data(response_data):
+        return Food(
+            id=response_data['id']
+            if 'id' in response_data
+            else response_data['ndbno'],
+            name=response_data['name'],
+        )
+
+
+class Nutrient(ListItem):
+    """Describes a USDA nutrient.
+    In reports, can hold associated measurement data."""
+
+    @staticmethod
+    def from_response_data(response_data):
+        return Nutrient(id=response_data['id'], name=response_data['name'])
+
+    def __init__(self, id, name,
+                 group=None, unit=None, value=None, measures=None):
+        super().__init__(id, name)
+        self.group = str(group) if group is not None else None
+        self.unit = str(unit) if unit is not None else None
+        self.value = float(value) if value is not None else None
+        self.measures = measures
+
+
 class Measure(UsdaObject):
 
     @staticmethod
@@ -38,56 +91,6 @@ class Measure(UsdaObject):
 
     def __str__(self):
         return self.label
-
-
-class Nutrient(UsdaObject):
-    """Describes a USDA nutrient.
-    In reports, can hold associated measurement data."""
-
-    @staticmethod
-    def from_response_data(response_data):
-        return Nutrient(id=response_data['id'], name=response_data['name'])
-
-    def __init__(self, id, name,
-                 group=None, unit=None, value=None, measures=None):
-        super().__init__()
-        self.id = int(id)
-        self.name = str(name)
-        self.group = str(group) if group is not None else None
-        self.unit = str(unit) if unit is not None else None
-        self.value = float(value) if value is not None else None
-        self.measures = measures
-
-    def __str__(self):
-        return self.name
-
-    def __repr__(self):
-        return "Nutrient ID {0} '{1}'".format(self.id, self.name)
-
-
-class Food(UsdaObject):
-    """Describes a USDA food item."""
-
-    @staticmethod
-    def from_response_data(response_data):
-        return Food(
-            id=response_data['id']
-            if 'id' in response_data
-            else response_data['ndbno'],
-            name=response_data['name'],
-        )
-
-    def __init__(self, id, name):
-        super().__init__()
-        self.id = int(id)
-        self.name = str(name)
-
-    def __str__(self):
-        return self.name
-
-    def __repr__(self):
-        return "{0} ID {1} '{2}'".format(
-            self.__class__.__name__, self.id, self.name)
 
 
 class FoodReport(UsdaObject):
@@ -138,7 +141,7 @@ class FoodReport(UsdaObject):
         self.food_group = str(food_group) if food_group is not None else None
 
     def __repr__(self):
-        return "Food Report for '{0}'".format(repr(self.food))
+        return "{0} for {1}".format(self.__class__.__name__, repr(self.food))
 
 
 class NutrientReportFood(Food):
