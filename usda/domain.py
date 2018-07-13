@@ -86,7 +86,8 @@ class Food(UsdaObject):
         return self.name
 
     def __repr__(self):
-        return "Food ID {0} '{1}'".format(self.id, self.name)
+        return "{0} ID {1} '{2}'".format(
+            self.__class__.__name__, self.id, self.name)
 
 
 class FoodReport(UsdaObject):

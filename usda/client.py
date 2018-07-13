@@ -5,7 +5,8 @@ from usda.enums import \
     UsdaApis, UsdaNdbListType, UsdaNdbReportType, UsdaUriActions
 from usda.domain import Nutrient, Food, FoodReport, NutrientReport
 from usda.base import DataGovClientBase
-from usda.pagination import RawListPaginator, ModelListPaginator
+from usda.pagination import \
+    RawPaginator, ModelPaginator, RawNutrientReportPaginator
 
 
 class UsdaClient(DataGovClientBase):
@@ -22,14 +23,14 @@ class UsdaClient(DataGovClientBase):
         Get a list of available nutrients in the database as JSON.
         """
         kwargs.setdefault('lt', UsdaNdbListType.all_nutrients.value)
-        return RawListPaginator(self, UsdaUriActions.list, **kwargs)
+        return RawPaginator(self, UsdaUriActions.list, **kwargs)
 
     def list_nutrients(self, max, offset=0, sort='n'):
         """
         Get a list of available nutrients in the database.
         Useful to generate Nutrient Reports.
         """
-        return ModelListPaginator(
+        return ModelPaginator(
             Nutrient,
             self.list_nutrients_raw(max=max, offset=offset, sort=sort),
         )
@@ -39,14 +40,14 @@ class UsdaClient(DataGovClientBase):
         Get a list of available food items in the database as JSON.
         """
         kwargs.setdefault('lt', UsdaNdbListType.food.value)
-        return RawListPaginator(self, UsdaUriActions.list, **kwargs)
+        return RawPaginator(self, UsdaUriActions.list, **kwargs)
 
     def list_foods(self, max, offset=0, sort='n'):
         """
         Get a list of available food items in the database.
         Useful to generate Food Reports.
         """
-        return ModelListPaginator(
+        return ModelPaginator(
             Food,
             self.list_foods_raw(max=max, offset=offset, sort=sort),
         )
@@ -55,13 +56,13 @@ class UsdaClient(DataGovClientBase):
         """
         Get a list of food items matching a specified query, as JSON.
         """
-        return RawListPaginator(self, UsdaUriActions.search, **kwargs)
+        return RawPaginator(self, UsdaUriActions.search, **kwargs)
 
     def search_foods(self, query, max, offset=0, sort='r'):
         """
         Get a list of food items matching a specified query.
         """
-        return ModelListPaginator(
+        return ModelPaginator(
             Food,
             self.search_foods_raw(q=query, max=max, offset=offset, sort=sort),
         )
