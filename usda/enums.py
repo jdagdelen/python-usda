@@ -13,6 +13,7 @@ class UsdaUriActions(Enum):
     """USDA API available actions"""
     list = "list"
     report = "reports"
+    v2report = "V2/reports"
     nutrients = "nutrients"
     search = "search"
 
