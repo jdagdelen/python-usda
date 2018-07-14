@@ -7,7 +7,7 @@ def read_requirements(filename):
 
 setup(
     name='python-usda',
-    version='0.3',
+    version='0.4',
     author='Lucidiot',
     packages=find_packages(
         exclude=["*.tests", "*.tests.*", "tests.*", "tests"]),
@@ -24,7 +24,7 @@ setup(
     keywords="api usda nutrition food",
     url="https://github.com/Lucidiot/python-usda",
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Natural Language :: English",
         "Intended Audience :: Developers",
