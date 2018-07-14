@@ -9,7 +9,7 @@ from usda.client import UsdaClient
 from usda.tests.sample_data import \
     FOOD_LIST_DATA, NUTRIENT_LIST_DATA, \
     FOOD_GROUP_LIST_DATA, DERIVATION_CODES_LIST_DATA, \
-    FOOD_REPORT_DATA, NUTRIENT_REPORT_DATA, \
+    FOOD_REPORT_DATA, FOOD_REPORT_V2_DATA, NUTRIENT_REPORT_DATA, \
     FOOD_SEARCH_DATA
 
 
@@ -31,6 +31,10 @@ class TestClient(object):
     def api_report(self, uri, request):
         return json.dumps(FOOD_REPORT_DATA)
 
+    @urlmatch(path=r'/usda/ndb/V2/reports')
+    def api_report_v2(self, uri, request):
+        return json.dumps(FOOD_REPORT_V2_DATA)
+
     @urlmatch(path=r'/usda/ndb/nutrients')
     def api_nutrients(self, uri, request):
         return json.dumps(NUTRIENT_REPORT_DATA)
@@ -41,7 +45,7 @@ class TestClient(object):
 
     @pytest.fixture
     def apimock(self):
-        return HTTMock(self.api_list, self.api_report,
+        return HTTMock(self.api_list, self.api_report, self.api_report_v2,
                        self.api_nutrients, self.api_search)
 
     def test_client_init(self):
@@ -114,6 +118,18 @@ class TestClient(object):
         with apimock:
             fr = cli.get_food_report(123456)
         assert fr.food.name == "Pizza"
+
+    def test_client_food_report_v2_raw(self, apimock):
+        cli = UsdaClient("API_KAY")
+        with apimock:
+            data = cli.get_food_report_v2_raw(ndbno=123456)
+        assert data == FOOD_REPORT_V2_DATA
+
+    def test_client_food_report_v2(self, apimock):
+        cli = UsdaClient("API_KAY")
+        with apimock:
+            fr = cli.get_food_report_v2(123456)
+        assert fr[0].food.name == "Pizza"
 
     def test_client_nutrient_report_raw(self, apimock):
         cli = UsdaClient("API_KAY")
