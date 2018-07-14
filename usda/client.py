@@ -4,8 +4,8 @@
 from usda.enums import \
     UsdaApis, UsdaNdbListType, UsdaNdbReportType, UsdaUriActions
 from usda.domain import \
-    ListItem, Nutrient, Food, FoodReport, NutrientReportFood
-from usda.base import DataGovClientBase
+    ListItem, Nutrient, Food, FoodReport, FoodReportV2, NutrientReportFood
+from usda.base import DataGovClientBase, DataGovApiError
 from usda.pagination import \
     RawPaginator, ModelPaginator, RawNutrientReportPaginator
 
@@ -114,6 +114,28 @@ class UsdaClient(DataGovClientBase):
         return FoodReport.from_response_data(
             self.get_food_report_raw(type=report_type.value, ndbno=ndb_food_id)
         )
+
+    def get_food_report_v2_raw(self, **kwargs):
+        """
+        Get a Food Report version 2 for one or more food item IDs as JSON.
+        """
+        return self.run_request(UsdaUriActions.v2report, **kwargs)
+
+    def get_food_report_v2(self, *ids, report_type=UsdaNdbReportType.basic):
+        """
+        Get a list of Food Reports version 2 for one or more food item IDs.
+        """
+        def _get_report(food):
+            if 'error' in food:
+                raise DataGovApiError(food['error'])
+            return FoodReportV2.from_response_data(food)
+
+        return list(map(
+            _get_report,
+            self.get_food_report_v2_raw(
+                type=report_type.value, ndbno=ids,
+            )['foods']
+        ))
 
     def get_nutrient_report_raw(self, **kwargs):
         """

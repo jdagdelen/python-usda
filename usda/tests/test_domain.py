@@ -4,8 +4,10 @@
 
 import pytest
 from usda.domain import \
-    UsdaObject, Food, Nutrient, Measure, FoodReport, NutrientReportFood
-from usda.tests.sample_data import FOOD_REPORT_DATA, NUTRIENT_REPORT_DATA
+    UsdaObject, Food, Nutrient, Measure, \
+    FoodReport, FoodReportV2, NutrientReportFood
+from usda.tests.sample_data import \
+    FOOD_REPORT_DATA, FOOD_REPORT_V2_DATA, NUTRIENT_REPORT_DATA
 
 
 class TestUsdaDomain(object):
@@ -63,11 +65,50 @@ class TestUsdaDomain(object):
         """Tests for FoodReport class"""
         fr = FoodReport.from_response_data(FOOD_REPORT_DATA)
         assert fr.report_type == "Basic"
-        assert fr.foot_notes == ["Footnote 1", "Footnote 2"]
+        assert len(fr.foot_notes) == 2
+        assert fr.foot_notes[0].id == "a"
+        assert fr.foot_notes[0].name == "Footnote 1"
+        assert fr.foot_notes[1].id == "b"
+        assert fr.foot_notes[1].name == "Footnote 2"
         assert fr.food_group is None
         assert fr.food.id == "123456"
         assert fr.food.name == "Pizza"
         assert repr(fr) == "FoodReport for Food ID 123456 'Pizza'"
+        assert len(fr.nutrients) == 1
+        n = fr.nutrients[0]
+        assert n.id == "42"
+        assert n.name == "Lactose"
+        assert n.group == "Proximates"
+        assert n.unit == "g"
+        assert n.value == 0.42
+        assert len(n.measures) == 1
+        m = n.measures[0]
+        assert m.label == "Measurement"
+        assert m.quantity == 1.0
+        assert m.gram_equivalent == 42.0
+        assert m.value == 13.37
+
+    def test_food_report_v2(self):
+        """Tests for FoodReportV2 class"""
+        fr = FoodReportV2.from_response_data(FOOD_REPORT_V2_DATA['foods'][0])
+        assert fr.report_type == "f"
+        assert len(fr.foot_notes) == 2
+        assert fr.foot_notes[0].id == "a"
+        assert fr.foot_notes[0].name == "Footnote 1"
+        assert fr.foot_notes[1].id == "b"
+        assert fr.foot_notes[1].name == "Footnote 2"
+        assert len(fr.sources) == 1
+        assert fr.sources[0].id == '1'
+        assert fr.sources[0].name == 'Holy Bible'
+        assert fr.sources[0].title == 'Holy Bible'
+        assert fr.sources[0].authors == 'Moses and co.'
+        assert fr.sources[0].vol == '42'
+        assert fr.sources[0].iss == '10'
+        assert fr.sources[0].year == '2042'
+        assert fr.food_group is None
+        assert fr.food.id == "123456"
+        assert fr.food.name == "Pizza"
+        assert repr(fr) == "FoodReportV2 for Food ID 123456 'Pizza'"
         assert len(fr.nutrients) == 1
         n = fr.nutrients[0]
         assert n.id == "42"

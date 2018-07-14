@@ -67,9 +67,46 @@ FOOD_REPORT_DATA = {
             ]
         },
         "footnotes": [
-            "Footnote 1", "Footnote 2"
-        ]
+            {
+                "idv": "a",
+                "desc": "Footnote 1",
+            },
+            {
+                "idv": "b",
+                "desc": "Footnote 2",
+            }
+        ],
     }
+}
+
+FOOD_REPORT_V2_DATA = {
+    "foods": [
+        {
+            "food": {
+                "sr": "Legacy",
+                "type": "f",
+                "desc": {
+                    "ndbno": "123456",
+                    "name": "Pizza"
+                },
+                "nutrients": FOOD_REPORT_DATA['report']['food']['nutrients'],
+                "footnotes": FOOD_REPORT_DATA['report']['footnotes'],
+                "sources": [
+                    {
+                        "id": "1",
+                        "title": "Holy Bible",
+                        "authors": "Moses and co.",
+                        "vol": "42",
+                        "iss": "10",
+                        "year": "2042",
+                    }
+                ],
+            }
+        }
+    ],
+    "api": 2,
+    "count": 1,
+    "notfound": 0,
 }
 
 NUTRIENT_REPORT_DATA = {

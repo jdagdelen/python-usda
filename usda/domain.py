@@ -126,8 +126,10 @@ class FoodReport(UsdaObject):
         return FoodReport(
             food=Food.from_response_data(food),
             nutrients=FoodReport._get_nutrients(food["nutrients"]),
-            report_type=report["type"],
-            foot_notes=report["footnotes"],
+            report_type=type,
+            foot_notes=[
+                ListItem(fn['idv'], fn['desc']) for fn in report["footnotes"]
+            ],
             food_group=food_group,
         )
 
@@ -142,6 +144,61 @@ class FoodReport(UsdaObject):
 
     def __repr__(self):
         return "{0} for {1}".format(self.__class__.__name__, repr(self.food))
+
+
+class Source(ListItem):
+    """
+    Describes a USDA nutrient information source
+    """
+
+    @staticmethod
+    def from_response_data(response_data):
+        return Source(
+            id=response_data['id'],
+            title=response_data['title'],
+            authors=response_data['authors'],
+            vol=response_data['vol'],
+            iss=response_data['iss'],
+            year=response_data['year'],
+        )
+
+    def __init__(self, id, title, authors, vol, iss, year):
+        super().__init__(id, title)
+        self.authors = authors
+        self.vol = vol
+        self.iss = iss
+        self.year = year
+
+    @property
+    def title(self):
+        return self.name
+
+
+class FoodReportV2(FoodReport):
+    """
+    Describes a USDA food report version 2.
+    """
+
+    @staticmethod
+    def from_response_data(response_data):
+        food = response_data['food']
+        return FoodReportV2(
+            food=Food.from_response_data(food['desc']),
+            food_group=None,
+            report_type=food['type'],
+            foot_notes=[
+                ListItem(fn['idv'], fn['desc']) for fn in food['footnotes']
+            ],
+            nutrients=FoodReport._get_nutrients(food['nutrients']),
+            sources=[
+                Source.from_response_data(s)
+                for s in food.get('sources', [])
+            ],
+        )
+
+    def __init__(self, sources, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.sources = sources
 
 
 class NutrientReportFood(Food):
