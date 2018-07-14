@@ -192,7 +192,7 @@ class FoodReportV2(FoodReport):
             nutrients=FoodReport._get_nutrients(food['nutrients']),
             sources=[
                 Source.from_response_data(s)
-                for s in food['sources']
+                for s in food.get('sources', [])
             ],
         )
 
