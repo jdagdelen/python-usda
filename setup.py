@@ -21,6 +21,7 @@ setup(
     license='GNU General Public License 3',
     description="A fork of pygov focused on USDA nutritional database API",
     long_description=open('README.md').read(),
+    long_description_content_type='text/markdown',
     keywords="api usda nutrition food",
     url="https://github.com/Lucidiot/python-usda",
     classifiers=[
