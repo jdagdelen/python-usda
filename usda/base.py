@@ -29,18 +29,18 @@ class DataGovInvalidApiKeyError(DataGovApiError):
 def api_request(uri, **parameters):
     """Get an API response"""
     r = requests.get(uri, parameters)
-    if r.ok:
-        return r.json()
     try:
         data = r.json()
     except ValueError:  # Server did not even return a JSON for the error
         r.raise_for_status()
     # The JSON error data when the API rate limit is exceeded is in a
     # different format than on parameter errors. This will handle both.
-    if data.get('errors') is not None:
+    if 'errors' in data:
         err = data['errors']['error'][0]
-    else:  # API rate limit exceeded error format
+    elif 'error' in data:  # API rate limit exceeded error format
         err = data['error']
+    else:
+        return data
     if err.get('parameter') is not None:  # Wrong parameter error
         raise ValueError(
             "API responded with an error on parameter '{0}': {1}".format(
