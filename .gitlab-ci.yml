@@ -1,0 +1,13 @@
+stages:
+  - test
+
+usda-tests:
+  stage: test
+  image: python:3.5-alpine
+
+  script:
+  - pip install .[dev]
+  - pytest --cov=usda
+  - codecov
+  - flake8
+

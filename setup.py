@@ -23,7 +23,7 @@ setup(
     long_description=open('README.md').read(),
     long_description_content_type='text/markdown',
     keywords="api usda nutrition food",
-    url="https://github.com/Lucidiot/python-usda",
+    url="https://gitlab.com/Lucidiot/python-usda",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
@@ -35,7 +35,8 @@ setup(
         "Programming Language :: Python :: 3.6"
     ],
     project_urls={
-        "Source Code": "https://github.com/Lucidiot/python-usda",
+        "Source Code": "https://gitlab.com/Lucidiot/python-usda",
+        "GitHub Mirror": "https://github.com/Lucidiot/python-usda",
         "Gitter Chat": "https://gitter.im/BrainshitPseudoScience/Lobby",
     }
 )
