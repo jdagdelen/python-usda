@@ -19,7 +19,7 @@ client = UsdaClient("YOUR_API_KEY")
 foods = client.list_foods(5)
 
 for food in foods:
-    print food.name
+    print(food.name)
 ```
 
 Result:
