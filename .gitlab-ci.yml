@@ -37,7 +37,7 @@ deploy-testpypi:
   stage: deploy
   when: manual
   only:
-    - branches@Lucidiot/pyurbantz
+    - branches@Lucidiot/python-usda
   environment:
     name: testpypi
     url: https://test.pypi.org/project/python-usda
