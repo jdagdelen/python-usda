@@ -2,8 +2,6 @@
 
 python-usda is a fork of [pygov](https://pypi.org/project/pygov/) focused on [USDA's Food Composition Database API](http://ndb.nal.usda.gov/ndb/doc/).
 
-**Full documentation : https://hackmd.io/s/ryDCyfIVX**
-
 ## Installation
 
 ```
