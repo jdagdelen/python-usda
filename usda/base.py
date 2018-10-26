@@ -4,31 +4,51 @@
 import requests
 
 BASE_URI = 'http://api.data.gov/'
+"""The base URI for all Data.gov API endpoints."""
 
 
 class DataGovApiError(BaseException):
-    """Base class for all Data.gov API errors"""
-    pass
+    """
+    Base class for all Data.gov API errors
+    """
 
 
 class DataGovApiRateExceededError(DataGovApiError):
-    """Data.gov API rate limit has been exceeded for this key"""
+    """
+    Data.gov API rate limit has been exceeded for this key.
+    """
 
     def __init__(self):
         super().__init__('API rate limit has been exceeded.')
 
 
 class DataGovInvalidApiKeyError(DataGovApiError):
-    """Supplied Data.gov API key is invalid."""
+    """
+    Supplied Data.gov API key is invalid.
+    """
 
     def __init__(self):
         super().__init__("A invalid Data.gov API key has been supplied. "
                          "Get one at https://api.data.gov/signup")
 
 
-def api_request(uri, **parameters):
-    """Get an API response"""
-    r = requests.get(uri, parameters)
+def api_request(url, **parameters):
+    r"""
+    Perform a GET request to an API endpoint.
+
+    :param str url: URL to perform a request to.
+    :param \**kwargs: GET parameters to send along with the request.
+    :return: Parsed JSON data.
+    :rtype: dict or list
+    :raises requests.exceptions.HTTPError: If a request has a
+       HTTP 4xx or 5xx status code.
+    :raises ValueError: If the API responds with an error on a GET parameter.
+    :raises DataGovApiRateExceededError: If the API rate limit has been
+       exceeded for a given API key.
+    :raises DataGovInvalidApiKeyError: If the API key is invalid.
+    :raises DataGovApiError: If the API returned any error.
+    """
+    r = requests.get(url, parameters)
     try:
         data = r.json()
     except ValueError:  # Server did not even return a JSON for the error
@@ -54,25 +74,45 @@ def api_request(uri, **parameters):
 
 
 class DataGovClientBase(object):
-    """Base class for Data.gov API clients."""
+    """
+    Base class for Data.gov API clients.
+    """
 
     def __init__(self, uri_part, api, api_key, use_format=True):
-        """Instanciate a Data.gov API client.
-        Requires an API endpoint and an API key.
-        Automatic return format (JSON/XML) adding to URLs can be disabled."""
+        """
+        :param str uri_part: First part of the path of an API endpoint.
+           Usually an organization name. For USDA's APIs, the path is ``usda/``.
+        :param api: An specific API subsection.
+        :type api: usda.enums.UsdaApis
+        :param str api_key: Data.gov API key to use for all requests.
+        :param bool use_format: Enable or disable Automatic return format
+           (JSON/XML) adding to URLs.
+        """
         self.uri_part = uri_part
         self.api = api
         self.key = api_key
         self.use_format = use_format
 
     def build_uri(self, uri_action):
-        """Build a valid URI for a specific action."""
+        """
+        Build a valid URI for a specific action.
+
+        :param uri_action: An action on the client's API.
+        :type uri_action: usda.enums.UsdaUriActions
+        """
         return "{0}{1}{2}/{3}".format(
             BASE_URI, self.uri_part, self.api.value, uri_action.value)
 
     def run_request(self, uri_action, **kwargs):
-        """Execute a request and return an API response.
-        Can throw HTTPError or any DataGovApiError."""
+        """
+        Execute a request and return an API response.
+        
+        :param uri_action: An action on the client's API.
+        :type uri_action: usda.enums.UsdaUriActions
+        :raises requests.exceptions.HTTPError: If a response has a HTTP 4xx or
+           5xx status code.
+        :raises DataGovApiError: If a Data.gov API returns an error.
+        """
         kwargs['api_key'] = self.key
         if 'format' not in kwargs and self.use_format:
             kwargs['format'] = 'json'
