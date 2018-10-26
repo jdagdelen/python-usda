@@ -57,7 +57,7 @@ class ListItem(UsdaObject):
         self.name = str(name)
         """
         Name of the list item.
-        
+
         :type: str
         """
 
@@ -125,7 +125,7 @@ class Nutrient(ListItem):
         :type measures: list(usda.domain.Measure) or None
         """
         super().__init__(id, name)
-        
+
         self.group = str(group) if group is not None else None
         """
         Name of the nutrient's group. Is only returned in Food Reports.

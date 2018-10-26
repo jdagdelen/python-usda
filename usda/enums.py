@@ -28,7 +28,7 @@ class UsdaUriActions(Enum):
 
     nutrients = "nutrients"
     """Nutrient Reports"""
-    
+
     search = "search"
     """Paginated lists of items matching a query"""
 
@@ -76,7 +76,7 @@ class UsdaNdbReportType(Enum):
     Added statistics data from the Standard Reference database when available.
 
     .. note::
-    
+
        The stats report type is currently not fully supported by python-usda.
        It is however possible to get all the returned data using raw methods
        on a :class:`usda.client.UsdaClient` instance.

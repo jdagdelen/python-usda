@@ -56,7 +56,7 @@ class RawPaginator(object):
 
         self.request_kwargs = request_kwargs
         """
-        Keyword arguments passed to the 
+        Keyword arguments passed to the
         :meth:`usda.base.DataGovClientBase.run_request` method.
 
         :type: dict(str, object)

@@ -81,7 +81,8 @@ class DataGovClientBase(object):
     def __init__(self, uri_part, api, api_key, use_format=True):
         """
         :param str uri_part: First part of the path of an API endpoint.
-           Usually an organization name. For USDA's APIs, the path is ``usda/``.
+           Usually an organization name.
+           For USDA's APIs, the path is ``usda/``.
         :param api: An specific API subsection.
         :type api: usda.enums.UsdaApis
         :param str api_key: Data.gov API key to use for all requests.
@@ -106,7 +107,7 @@ class DataGovClientBase(object):
     def run_request(self, uri_action, **kwargs):
         """
         Execute a request and return an API response.
-        
+
         :param uri_action: An action on the client's API.
         :type uri_action: usda.enums.UsdaUriActions
         :raises requests.exceptions.HTTPError: If a response has a HTTP 4xx or
