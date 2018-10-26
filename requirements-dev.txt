@@ -1,6 +1,6 @@
 pytest
 pytest-cov
 httmock
-flake8
+flake8>=3.5
 codecov
-
+Sphinx>=1.8.1
