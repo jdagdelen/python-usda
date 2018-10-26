@@ -1,23 +1,46 @@
 API Reference
 =============
 
+.. contents::
+
 Client
 ------
 
-.. automodule:: usda.client
+.. autoclass:: usda.client.UsdaClient
    :members:
 
 Domain
 ------
 
+Base classes
+^^^^^^^^^^^^
+
 .. automodule:: usda.domain
-   :members:
+   :members: UsdaObject, ListItem
+
+Items
+^^^^^
+
+.. automodule:: usda.domain
+   :members: Food, Nutrient, Measure 
+
+Food Reports
+^^^^^^^^^^^^
+
+.. automodule:: usda.domain
+   :members: FoodReport, FoodReportV2, Source
+
+Nutrient Reports
+^^^^^^^^^^^^^^^^
+
+.. automodule:: usda.domain
+   :members: NutrientReportFood
 
 Enums
 -----
 
 .. automodule:: usda.enums
-   :members:
+   :members: UsdaApis, UsdaUriActions, UsdaNdbListType, UsdaNdbReportType
 
 Low level classes
 -----------------
@@ -26,7 +49,14 @@ Base client
 ^^^^^^^^^^^
 
 .. automodule:: usda.base
-   :members:
+   :members: BASE_URI, DataGovClientBase, api_request
+
+Exceptions
+^^^^^^^^^^
+
+.. automodule:: usda.base
+   :members: DataGovApiError, DataGovApiRateExceededError,
+      DataGovInvalidApiKeyError
 
 Pagination
 ^^^^^^^^^^
@@ -36,4 +66,4 @@ pagination, some specific generators ("paginators") have been created.
 They are designed to be lazy and will only make requests when necessary.
 
 .. automodule:: usda.pagination
-   :members:
+   :members: RawPaginator, ModelPaginator, RawNutrientReportPaginator
