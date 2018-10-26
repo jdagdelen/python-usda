@@ -20,21 +20,70 @@ Setup
 
 ::
 
-    pip install python-usda
+   pip install python-usda
 
 Usage
 -----
 
 python-usda provides an API client called ``UsdaClient`` that is the
-base to all API requests.
+base to all API requests:
 
 .. code:: python
 
-    from usda import UsdaClient
-    client = UsdaClient('API_KEY')
+   from usda import UsdaClient
+   client = UsdaClient('API_KEY')
 
 The USDA API requires a Data.gov API key that you can get for free
 `here <https://api.data.gov/signup/>`_.
+
+Using the client, you can list food items:
+
+.. code:: python
+
+   foods_list = client.list_foods(5)
+   for _ in range(5):
+       food_item = next(foods_list)
+       print(food_item.name)
+
+Be careful; the ``5`` argument in the ``list_foods`` method only sets the
+amount of items that are returned at once; requesting one more will perform
+a request for another page of 5 results.
+
+Instead of just listing food items, it is possible to perform a text search:
+
+.. code:: python
+
+   foods_search = client.search_foods(
+        'coffee, instant, regular, prepared with water', 1)
+
+   coffee = next(foods_search)
+   print(coffee)
+
+The above code will output::
+
+   Food ID 14215 'Beverages, coffee, instant, regular, prepared with water'
+
+We can then use this food item's ID to request a Food Report:
+
+.. code:: python
+
+   report = client.get_food_report(coffee.id)
+   for nutrient in report.nutrients:
+        print(nutrient.name, nutrient.value, nutrient.unit)
+
+The above code will output::
+
+   Water 99.09 g
+   Energy 2.0 kcal
+   Protein 0.1 g
+   [...]
+   Cholesterol 0.0 mg
+   Caffeine 26.0 mg
+
+And there it is, your first nutritional information report.
+
+There is more available than mere food items and nutritional facts;
+head over to the `API Guide <guide>`_ to learn more.
 
 Error handling
 --------------
@@ -71,5 +120,6 @@ Other topics
 .. toctree::
    :maxdepth: 2
    
+   guide
    contributing
    api
