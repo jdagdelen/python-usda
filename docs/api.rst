@@ -2,6 +2,8 @@ API Reference
 =============
 
 .. contents::
+   :local:
+   :backlinks: none
 
 Client
 ------

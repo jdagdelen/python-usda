@@ -16,7 +16,7 @@ class UsdaObject(ABC):
         Generate an object from JSON response data.
 
         :param response_data: Parsed JSON response data from the API.
-        :rtype: usda.domain.UsdaObject
+        :rtype: UsdaObject
         """
         raise NotImplementedError
 
@@ -33,7 +33,7 @@ class ListItem(UsdaObject):
         Generate a ListItem from JSON response data.
 
         :param dict response_data: Parsed JSON response data from the API.
-        :rtype: usda.domain.ListItem
+        :rtype: ListItem
         """
         return ListItem(
             id=response_data['id'],
@@ -82,7 +82,7 @@ class Food(ListItem):
         Generate a Food instance from JSON response data.
 
         :param dict response_data: Parsed JSON response data from the API.
-        :rtype: usda.domain.Food
+        :rtype: Food
         """
         return Food(
             id=response_data['id']
@@ -122,7 +122,7 @@ class Nutrient(ListItem):
         :param value: Quantity of the nutrient, in the context of a report.
         :type value: float or None
         :param measures: Measurements of the nutrient.
-        :type measures: list(usda.domain.Measure) or None
+        :type measures: list(Measure) or None
         """
         super().__init__(id, name)
 
@@ -151,11 +151,11 @@ class Nutrient(ListItem):
 
         self.measures = measures
         """
-        :class:`usda.domain.Measure` instances describing the various
+        :class:`Measure` instances describing the various
         available measurements for the nutrient.
         Is only returned in Food and Nutrient reports.
 
-        :type: list(usda.domain.Measure) or None
+        :type: list(Measure) or None
         """
 
 
@@ -170,7 +170,7 @@ class Measure(UsdaObject):
         Generate a Measure instance from JSON response data.
 
         :param dict response_data: Parsed JSON response data from the API.
-        :rtype: usda.domain.Measure
+        :rtype: Measure
         """
         return Measure(
             quantity=response_data["qty"],
@@ -259,7 +259,7 @@ class FoodReport(UsdaObject):
         Generate a Food Report from JSON response data.
 
         :param dict response_data: Parsed JSON response data from the API.
-        :rtype: usda.domain.FoodReport
+        :rtype: FoodReport
         """
         report = response_data["report"]
         type = report["type"]
@@ -279,13 +279,13 @@ class FoodReport(UsdaObject):
     def __init__(self, food, nutrients, report_type, foot_notes, food_group):
         """
         :param food: The food item the report is about.
-        :type food: usda.domain.Food
+        :type food: Food
         :param nutrients: List of nutrients with measurement data.
-        :type nutrients: list(usda.domain.Nutrient)
+        :type nutrients: list(Nutrient)
         :param str report_type: The Food Report's type as a string
            (``Full``, ``Basic`` or ``Statistics``)
         :param foot_notes: A list of foot notes for the report.
-        :type foot_notes: list(str) or list(usda.domain.ListItem)
+        :type foot_notes: list(str) or list(ListItem)
         :param food_group: The food group's name.
         :type food_group: str or None
         """
@@ -296,14 +296,14 @@ class FoodReport(UsdaObject):
         """
         The food item the report is about.
 
-        :type: usda.domain.Food
+        :type: Food
         """
 
         self.nutrients = nutrients
         """
         List of nutrients with measurement data.
 
-        :type: list(usda.domain.Nutrient)
+        :type: list(Nutrient)
         """
 
         self.report_type = str(report_type)
@@ -318,10 +318,10 @@ class FoodReport(UsdaObject):
         """
         A list of foot notes for the report.
         In Version 1 Food Reports, is a list of strings.
-        In Version 2 Food Reports, is a list of :class:`usda.domain.ListItem`,
+        In Version 2 Food Reports, is a list of :class:`ListItem`,
         as footnotes are given an ID and a description.
 
-        :type: list(str) or list(usda.domain.ListItem)
+        :type: list(str) or list(ListItem)
         """
 
         self.food_group = str(food_group) if food_group is not None else None
@@ -341,7 +341,7 @@ class Source(ListItem):
         Generate a Source instance from parsed JSON data.
 
         :param dict response_data: Parsed JSON response data.
-        :rtype: usda.domain.Source
+        :rtype: Source
         """
         return Source(
             id=response_data['id'],
@@ -396,7 +396,7 @@ class Source(ListItem):
     @property
     def title(self):
         """
-        Alias for :attr:`usda.domain.ListItem.name`.
+        Alias for :attr:`ListItem.name`.
         """
         return self.name
 
@@ -410,7 +410,7 @@ class FoodReportV2(FoodReport):
     .. note::
 
        Even if sources are added, footnotes still exist, and are parsed as
-       :class:`usda.domain.ListItem` instances instead of strings.
+       :class:`ListItem` instances instead of strings.
     """
 
     @staticmethod
@@ -419,7 +419,7 @@ class FoodReportV2(FoodReport):
         Generate a Food Report version 2 from JSON response data.
 
         :param dict response_data: Parsed JSON response data from the API.
-        :rtype: usda.domain.FoodReportV2
+        :rtype: FoodReportV2
         """
         food = response_data['food']
         return FoodReportV2(
@@ -439,11 +439,11 @@ class FoodReportV2(FoodReport):
     def __init__(self, sources, *args, **kwargs):
         r"""
         :param sources: Sources for the food report's data.
-        :type sources: list(usda.domain.Source)
+        :type sources: list(Source)
         :param \*args: Arguments given to the inherited
-           :class:`usda.domain.FoodReport` class.
+           :class:`FoodReport` class.
         :param \**kwargs: Keyword arguments given to the inherited
-           :class:`usda.domain.FoodReport` class.
+           :class:`FoodReport` class.
         """
         super().__init__(*args, **kwargs)
         self.sources = sources
@@ -460,7 +460,7 @@ class NutrientReportFood(Food):
         :param int id: Unique identifier of the food item.
         :param str name: Name of the food item.
         :param nutrients: Nutrients for the given food item.
-        :type nutrients: list(usda.domain.Nutrient)
+        :type nutrients: list(Nutrient)
         """
         super().__init__(id, name)
 
@@ -469,7 +469,7 @@ class NutrientReportFood(Food):
         """
         Nutrients for the given food item.
 
-        :type: list(usda.domain.Nutrient)
+        :type: list(Nutrient)
         """
 
     @staticmethod
@@ -478,7 +478,7 @@ class NutrientReportFood(Food):
         Generate a NutrientReportFood instance from parsed JSON data.
 
         :param dict response_data: Parsed JSON response data.
-        :rtype: usda.domain.NutrientReportFood
+        :rtype: NutrientReportFood
         """
         food = Food.from_response_data(response_data)
         return NutrientReportFood(food.id, food.name, [
